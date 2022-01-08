@@ -1,3 +1,25 @@
+----------------------------------------------------
+-- USAGE -------------------------------------------
+-- cpm.install(dependencies)
+
+
+-- dependencies Type
+-- (string needs to be one of the allready implemented ones in the cpm.Programms)
+-- Table of strings
+
+-- OR
+
+-- (Can be used to Install custom programms) =>
+-- Table of tables
+-- [Name : string] = {
+
+-- + code : string (Pastebin code),
+-- + gitDownload : string (GitHub RAW Code),
+-- + path : string (Path the file should be at )
+-- + requ : string (Forgot what this was for)
+
+-- }
+
 local args = {...}
 local pretty = require("cc.pretty")
 
@@ -16,7 +38,8 @@ cpm.Programms =
     ["Wood"] = {code = "0aNYtYhe", path = "wood.lua"},
     ["QuarryInterfaceV2"] = {code = "gi79PfVh", path = "API/QuarryInterfaceV2"},
     ["QuarryV2"] = {code = "6cAWHg9J", path = "QuarryV2"},
-
+    ["cpm"] = {gitDownload = "ChristophLHR/CCraft/main/PackageManager/cpm.lua", path = "cpm.lua"},
+    ["GitInstaller"] = {code = "493LbAC4", path = "GitInstaller.lua"},
 }
 
 cpm.commands = {
@@ -54,9 +77,9 @@ function install(dependency)
             if(type(dep) == "table") then
                 -- print("DEP ",pretty.pretty(dep))
                 -- print("Code ",pretty.pretty(dep.code),"Path ", pretty.pretty(dep.path))
-                installOne(dep.code, dep.path)
+                installOne(dep)
             elseif (type(dep) == "string") then
-                installOne(prog[dep].code, prog[dep].path)
+                installOne(prog[dep])
             end
 
         end
@@ -65,39 +88,64 @@ function install(dependency)
     end
 end
 
-function installOne(code, path)
+function installOne(dependencies)
 
-    local f = io.open(path)
+    local f = io.open(dependencies.path)
     if(f == nil) then
-        shell.run("pastebin", "run", "FuQ3WvPs "..code.." "..path)
+        if(dependencies.gitDownload ~= nil) then
+            cpm.gitDownload(dependencies.path, dependencies.gitDownload);
+        elseif (dependencies.code ~=nil) then
+            shell.run("pastebin", "run", "FuQ3WvPs "..dependencies.code.." "..dependencies.path);
+        end
     end
     io.close(f)
 end
 
-function updateOne(code, path)
-    shell.run("pastebin", "run", "FuQ3WvPs "..code.." "..path)
+function updateOne(dependencies)
+    
+    if(dependencies.gitDownload ~= nil) then
+        fs.delete(dependencies.path);
+        cpm.gitDownload(dependencies.path, dependencies.gitDownload);
+    elseif(dependencies.code ~= nil) then
+        shell.run("pastebin", "run", "FuQ3WvPs "..dependencies.code.." "..dependencies.path);
+    end
 end
 
 if #args == 0 then
     shell.setCompletionFunction("cpm.lua", fillOut)
 elseif args[1] == "update" then
     if(args[2]==nil) then
-        shell.run("pastebin", "run", "FuQ3WvPs NGyk6xyp cpm.lua")
+        shell.run("pastebin run", cpm.Programms.GitInstaller.code , "https://raw.githubusercontent.com/"..
+        cpm.Programms.cpm.gitDownload, cpm.Programms.cpm.path, "run");
     else
         -- should all be string, only accessable though the shell (so far)
         local prog = cpm.Programms[args[2]]
-        updateOne(prog.code, prog.path)
+        updateOne(prog)
         
     end
 elseif args[1] == "install" then
-    install(args[2])
+    install(args[2]);
 end
-
--- Packetmanager for other programms
-
 
 function cpm.install(dependency)
     install(dependency)    
 end
+
+function cpm.download(fileName, url)
+    local request = http.get(url);
+    if (request.getResponseCode() ~= 200) then return false end;
+    
+    local file = fs.open(fileName, "w");
+    if(file == nil) then return false end;
+    
+    local content = request.readAll();
+    file.write(content);
+    file.close();
+    return true;
+end;
+
+function cpm.gitDownload(fileName, url)
+    return cpm.download("https://raw.githubusercontent.com/"..fileName, url);
+end;
 
 return cpm
