@@ -71,7 +71,7 @@ function install(dependency)
     -- print("All => ", pretty.pretty(dependency))
     local prog = cpm.Programms
     if type(dependency) == "string" then
-        installOne(prog[dependency].code, prog[dependency].path)
+        installOne(prog[dependency])
     elseif type(dependency) == "table" then
         for _, dep in pairs(dependency) do
             if(type(dep) == "table") then
