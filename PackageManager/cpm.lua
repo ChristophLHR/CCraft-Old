@@ -27,15 +27,15 @@ cpm = {}
 
 cpm.Programms = 
 {
-    ["EventHandler"] = {code = "HiG0dTbR", path = "API/EventHandler.lua", requ = "API/EventHandler"},
+    ["EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/EventHandlerv2.lua", code = "HiG0dTbR", path = "API/EventHandler.lua", requ = "API/EventHandler"},
     ["DependenciesScript"] = {code = "qndnG9Q6", path = "API/DependenciesScript.lua", requ = "API/DependenciesScript"},
-    ["OOP"] = {code = "eERx21wN", path = "API/OOP.lua", requ = "API/OOP"},
-    ["WindowHandler"] = {code = "x4EPvTUZ", path = "API/windowHandler.lua", requ = "API/windowHandler"},
-    ["guiDrawSelf"] = {code = "aNFsa3B5", path = "API/guiDrawSelf.lua", requ = "API/guiDrawSelf"},
+    ["OOP"] = {gitDownload = "ChristophLHR/CCraft/main/Basics/OOP.lua", code = "eERx21wN", path = "API/OOP.lua", requ = "API/OOP"},
+    ["WindowHandler"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/WindowHandler.lua", code = "x4EPvTUZ", path = "API/windowHandler.lua", requ = "API/windowHandler"},
+    ["guiDrawSelf"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/GUIDrawSelf.lua", code = "aNFsa3B5", path = "API/guiDrawSelf.lua", requ = "API/guiDrawSelf"},
     ["CreateModRequestUI"] = {code = "6ek7uPec", path = "CreateModRequestUI.lua"},
-    ["turtleController"] = {code = "5U5LaGwD", path = "API/turtleController.lua"},
+    ["turtleController"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/TurtleControler.lua", code = "5U5LaGwD", path = "API/turtleController.lua"},
     ["quarry"] = {code = "8xUKSSAZ", path = "quarry.lua"},
-    ["Wood"] = {code = "0aNYtYhe", path = "wood.lua"},
+    ["Wood"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/WoodChuck.lua",code = "0aNYtYhe", path = "wood.lua"},
     ["QuarryInterfaceV2"] = {code = "gi79PfVh", path = "API/QuarryInterfaceV2"},
     ["QuarryV2"] = {code = "6cAWHg9J", path = "QuarryV2"},
     ["cpm"] = {gitDownload = "ChristophLHR/CCraft/main/PackageManager/cpm.lua", path = "cpm.lua"},
