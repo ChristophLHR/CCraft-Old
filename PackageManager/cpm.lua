@@ -36,8 +36,8 @@ cpm.Programms =
     ["turtleController"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/TurtleControler.lua", code = "5U5LaGwD", path = "API/turtleController.lua"},
     ["quarry"] = {code = "8xUKSSAZ", path = "quarry.lua"},
     ["Wood"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/WoodChuck.lua",code = "0aNYtYhe", path = "wood.lua"},
-    ["QuarryInterfaceV2"] = {code = "gi79PfVh", path = "API/QuarryInterfaceV2"},
-    ["QuarryV2"] = {code = "6cAWHg9J", path = "QuarryV2"},
+    ["QuarryInterface"] = {code = "gi79PfVh", path = "API/QuarryInterface.lua"},
+    ["Quarry"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Quarry.lua", path = "Quarry"},
     ["cpm"] = {gitDownload = "ChristophLHR/CCraft/main/PackageManager/cpm.lua", path = "cpm.lua"},
     ["GitInstaller"] = {code = "493LbAC4", path = "GitInstaller.lua"},
 }
@@ -93,7 +93,10 @@ function installOne(dependencies)
     local f = io.open(dependencies.path)
     if(f == nil) then
         if(dependencies.gitDownload ~= nil) then
-            cpm.gitDownload(dependencies.path, dependencies.gitDownload);
+            if not cpm.gitDownload(dependencies.path, dependencies.gitDownload) then
+                print('Could not install '..dependencies.path);
+                error('At: '..dependencies.gitDownload);
+            end
         elseif (dependencies.code ~=nil) then
             shell.run("pastebin", "run", "FuQ3WvPs "..dependencies.code.." "..dependencies.path);
         end
@@ -105,7 +108,10 @@ function updateOne(dependencies)
     
     if(dependencies.gitDownload ~= nil) then
         fs.delete(dependencies.path);
-        cpm.gitDownload(dependencies.path, dependencies.gitDownload);
+        if not cpm.gitDownload(dependencies.path, dependencies.gitDownload) then
+            print('Could not update '..dependencies.path);
+                error('At: '..dependencies.gitDownload);
+        end
     elseif(dependencies.code ~= nil) then
         shell.run("pastebin", "run", "FuQ3WvPs "..dependencies.code.." "..dependencies.path);
     end
@@ -128,12 +134,12 @@ elseif args[1] == "install" then
 end
 
 function cpm.install(dependency)
-    install(dependency)    
+    install(dependency)
 end
 
 function cpm.download(fileName, url)
     local request = http.get(url);
-    if (request.getResponseCode() ~= 200) then return false end;
+    if (request == nil or request.getResponseCode() ~= 200) then return false end;
     
     local file = fs.open(fileName, "w");
     if(file == nil) then return false end;
@@ -145,7 +151,7 @@ function cpm.download(fileName, url)
 end;
 
 function cpm.gitDownload(fileName, url)
-    return cpm.download("https://raw.githubusercontent.com/"..fileName, url);
+    return cpm.download(fileName,"https://raw.githubusercontent.com/"..url);
 end;
 
 return cpm

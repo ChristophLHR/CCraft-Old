@@ -2,16 +2,16 @@
 
 local dependencies = {
     "turtleController",
-    "QuarryInterfaceV2"
+    "QuarryInterface"
 }
 
 local installer = require("cpm")
 installer.install(dependencies)
 
 -- tControler = require("API/turtleController")
-local interface = require("API/QuarryInterfaceV2")
+local interface = require("API/QuarryInterface")
 
-local function run()
-    interface.Init();
-end
+_ = interface.Events["Start"] + function() print("Starting") end
+
+interface.Init();
 run();
