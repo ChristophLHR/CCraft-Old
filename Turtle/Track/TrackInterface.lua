@@ -9,7 +9,7 @@ local EventHandler = require("API/EventHandler");
 local windowHandler = require("API/windowHandler");
 
 
-Forward = nil;
+Values = {};
 
 --WindowSettings
 Window = nil;
@@ -46,8 +46,8 @@ local function readXYZ()
     table.insert(DirectionInfo, windowHandler:addText(1, 1, 'Forward?', colors.white, colors.black, Window));
     windowHandler:drawAllWindows();
     term.setCursorPos(25,1);
-    Forward = read() or 1;
-    table.insert(DirectionInfo, windowHandler:addText(25, 1, Forward, colors.white, colors.black, Window));
+    Values.Forward = read() or 1;
+    table.insert(DirectionInfo, windowHandler:addText(25, 1, Values.Forward, colors.white, colors.black, Window));
 end;
 
 local function manageInfoBox()
@@ -79,6 +79,4 @@ function Init()
 end;
 
 
-return {["Events"] = Events, ["Init"] = Init, ["Values"] = {
-    ["X"] = Forward,
-}};
+return {["Events"] = Events, ["Init"] = Init, ["Values"] = Values};
