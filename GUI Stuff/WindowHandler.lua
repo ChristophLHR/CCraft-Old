@@ -524,7 +524,7 @@ function windowHandler:listenToEvents(tickRate, dragTimer)
                 for key, value in pairs(collidedWith) do
                     for wKey,wValue in pairs(value) do
                         
-                        if wValue.event ~= nil then wValue.event:invoke() end
+                        if wValue.event ~= nil then wValue.event:invoke(wValue.parameter) end
 
                     end
 

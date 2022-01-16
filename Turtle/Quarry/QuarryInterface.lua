@@ -16,37 +16,23 @@ local floor, ceiling, wall
 local toggled = false;
 local step = 1;
 local stepFunctions = {
-    [2] = function ()
-        floor = toggled;
-        windowHandler:editText(Line5, nil, nil, 'Create Ceiling', nil, nil);
-        Toggle(true);
-        step = step + 1;
-    end,
-    [3] = function ()
-        ceiling = Toggle;
-        windowHandler:editText(Line5, nil, nil, 'Create Walls', nil, nil);
-        Toggle(true);
-        step = step + 1;
-    end,
-    [4] = function ()
 
-        windowHandler:editButton(nextButton, nil, nil, 'Start', colors.white, colors.yellow, nil, nil);
-        windowHandler.drawChanges = true;
-        step = step + 1;
-    end,
-    [5] = function ()
-        windowHandler.continueListener = false;
-        term.clear();
-        print('starting');
-        sleep(2);
-        Events["Start"]:invoke();
-    end
 }
 
 --WindowSettings
 Window = nil;
-Line5 = nil;
-nextButton = nil;
+InfoWindow = nil;
+InfoText = nil;
+Line1 = nil;
+NextButton = nil;
+CeilingButtom = nil;
+FloorButtom = nil;
+WallsButtom = nil;
+
+BUGGED = true;
+
+
+
 local nextEvent;
 local toggleButton;
 local toggleEvent;
@@ -56,7 +42,7 @@ local toggleColor = {
 }
 
 
-function next()
+function start()
 
     stepFunctions[step]();
 
@@ -81,41 +67,59 @@ Events = {
     ["Stop"] = EventHandler("Stop");
 }
 
+local function readXYZ()
+    print("")
+end
+
+local function printInfoBox()
+
+end
 
 function Init()
     local width, height = term.current().getSize();
     Window = windowHandler:createWindow(term.current(), 1, 1, width, height, "window");
-
-    -- make this to step one!
-    print("1. Slot Fuel");
-    print("2. Slot Ground");
-    print("3. Slot Walls");
-    print("4. Slot Ceiling");
+    InfoWindow = windowHandler:createWindow(Window, 1, 9, 15, 4, "InfoBox");
+    windowHandler:addBox(1, 1, colors.yellow, 15,4, InfoWindow);
+    windowHandler:addText(1,1, "1. Slot Fuel", colors.black, colors.yellow, InfoWindow);
+    windowHandler:addText(1,2, "2. Slot Ground", colors.black, colors.yellow, InfoWindow);
+    windowHandler:addText(1,3, "3. Slot Walls", colors.black, colors.yellow, InfoWindow);
+    windowHandler:addText(1,4, "4. Slot Ceiling", colors.black, colors.yellow, InfoWindow);
     
+
     -- print("Parameter: Forward, Left, Height");
     -- print("Enter:");
     -- initX, initY, initZ = read();
     
-    initX = nil~=initX and initX or 1;
-    initY = nil~=initY and initY or 1;
-    initZ = nil~=initZ and initZ or 1;
+    -- initX = nil~=initX and initX or 1;
+    -- initY = nil~=initY and initY or 1;
+    -- initZ = nil~=initZ and initZ or 1;
     
-    step = step + 1;
+    -- step = step + 1;
 
 
-    Line5 = windowHandler:addText(1, 5, 'Create Floor?', colors.white, colors.black, Window);
-
+    Line1 = windowHandler:addText(1, 1, 'Forward?', colors.white, colors.black, Window);
+    windowHandler:drawAllWindows();
+    term.setCursorPos(1,2);
+    initX = read() or 1;
+    Line1 = windowHandler:addText(1, 1, 'Left?', colors.white, colors.black, Window);
+    windowHandler:drawAllWindows();
+    term.setCursorPos(1,2);
+    initY = read() or 1;
+    Line1 = windowHandler:addText(1, 1, 'Height (Going up)?', colors.white, colors.black, Window);
+    windowHandler:drawAllWindows();
+    term.setCursorPos(1,2);
+    initZ = read() or 1;
     toggleButton = windowHandler:addButton(width - 4, 5, 'x', colors.white, colors.green, 3, 3, Window);
     toggleEvent = windowHandler:getEventHandler(toggleButton, "Toggle");
     _ = toggleEvent + Toggle;
 
-    nextButton = windowHandler:addButton(width - 7, 10, 'Next', colors.green, colors.white, 6, 2, Window)
-    nextEvent = windowHandler:getEventHandler(nextButton, "Next");
-    _ = nextEvent + next;
+    NextButton = windowHandler:addButton(width - 7, 10, 'Next', colors.green, colors.white, 6, 2, Window)
+    nextEvent = windowHandler:getEventHandler(NextButton, "Next");
+    _ = nextEvent + start;
 
     
-    
-    windowHandler:listenToEvents(0.1);
+    windowHandler:drawAllWindows();
+    -- windowHandler:listenToEvents(0.1);
     
 
 end

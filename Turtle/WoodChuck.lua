@@ -15,24 +15,6 @@ local testing = false;
 
 local dropLootSlot = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-local function suckupItems()
-    tControler:goStraight(1);
-    tControler:goLeft(1);
-    tControler:tryMove('tL');
-    for j = 1, 3 do
-        for i = 1, 2 do
-            turtle.suckDown();
-            tControler:goStraight(1);
-        end
-        if(j == 1) then
-            tControler:goLeft(1);
-            tControler:tryMove('tL');
-        else
-            tControler:goRight(1);
-            tControler:tryMove('tR');
-        end
-    end
-end
 
 local function cutTree()
     if tControler:compareInspect(wood, tControler:inspect()) then
@@ -49,10 +31,6 @@ local function cutTree()
         end
 
         while height > 0 do
-            if(height == 1) then
-                sleep(2);
-                suckupItems();
-            end
             tControler:goDown(1);
             height = height - 1;
         end
@@ -61,6 +39,24 @@ local function cutTree()
         turtle.place();
         turtle.select(select);
     end
+end
+
+local function suckLoot()
+
+    tControler:tryMove('b');
+    tControler:tryMove('b');
+    tControler:tryMove('d');
+    tControler:tryMove('d');
+    tControler:tryMove('d');
+    tControler:tryMove('d');
+    while(turtle.suckDown()) do end;
+    tControler:tryMove('u');
+    tControler:tryMove('u');
+    tControler:tryMove('u');
+    tControler:tryMove('u');
+    tControler:tryMove('f');
+    tControler:tryMove('f');
+
 end
 
 local function dropLoot()
@@ -97,9 +93,10 @@ local function run()
         tControler:goRight(10);
         tControler:goRight(1);
         tControler:tryMove('tR');
+        suckLoot();
         dropLoot();
         print('Sleeping 500 seconds');
-        sleep(500);
+        sleep(5);
         
     end
 end
