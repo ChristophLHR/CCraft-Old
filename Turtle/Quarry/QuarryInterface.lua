@@ -21,21 +21,16 @@ local stepFunctions = {
 
 --WindowSettings
 Window = nil;
+WindowWith = nil;
+WindowHeight = nil;
 InfoWindow = nil;
-InfoText = nil;
-Line1 = nil;
-NextButton = nil;
-CeilingButtom = nil;
-FloorButtom = nil;
-WallsButtom = nil;
+InfoText = {};
+DirectionInfo = {};
+StartButton = nil;
+BuildingUI = {};
 
 BUGGED = true;
 
-
-
-local nextEvent;
-local toggleButton;
-local toggleEvent;
 local toggleColor = {
     ["true"] = colors.green,
     ["false"] = colors.red
@@ -44,11 +39,13 @@ local toggleColor = {
 
 function start()
 
-    stepFunctions[step]();
-
+    windowHandler.continueListener = false;
+    term.clear();
+    term.setCursorPos(1,1);
+    Events.Start:invoke();
 end
 
-function Toggle(newValue)
+function Toggle(button ,newValue)
     -- Toggle Colors as well!
 
     if(type(newValue) == "boolean") then
@@ -56,9 +53,9 @@ function Toggle(newValue)
     else
         toggled = not toggled;
     end
-    windowHandler:editBox(toggleButton, nil, nil, toggleColor[tostring(toggled)], nil, nil);
+    windowHandler:editBox(button, nil, nil, toggleColor[tostring(toggled)], nil, nil);
     windowHandler.drawChanges = true;
-    print(toggled)
+    -- print(toggled)
 end
 
 Events = {
@@ -68,60 +65,77 @@ Events = {
 }
 
 local function readXYZ()
-    print("")
+    table.insert(DirectionInfo, windowHandler:addText(1, 1, 'Forward?', colors.white, colors.black, Window));
+    windowHandler:drawAllWindows();
+    term.setCursorPos(25,1);
+    initX = read() or 1;
+    table.insert(DirectionInfo, windowHandler:addText(25, 1, initX, colors.white, colors.black, Window));
+    
+    table.insert(DirectionInfo, windowHandler:addText(1, 2, 'Left?', colors.white, colors.black, Window));
+    windowHandler:drawAllWindows();
+    term.setCursorPos(25,2);
+    initY = read() or 1;
+    table.insert(DirectionInfo, windowHandler:addText(25, 2, initY, colors.white, colors.black, Window));
+    
+    table.insert(DirectionInfo, windowHandler:addText(1, 3, 'Height (Going up)?', colors.white, colors.black, Window));
+    windowHandler:drawAllWindows();
+    term.setCursorPos(25,3);
+    initZ = read() or 1;
+
+    for key, value in pairs(DirectionInfo) do
+        windowHandler:removeObject(value, Window);
+    end
 end
 
-local function printInfoBox()
+local function manageInfoBox()
+    table.insert(InfoText, windowHandler:addBox(1, 1, colors.yellow, 15,4, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(1,1, "1. Slot Fuel", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(1,2, "2. Slot Ground", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(1,3, "3. Slot Walls", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(1,4, "4. Slot Ceiling", colors.black, colors.yellow, InfoWindow));
+end
 
+local function manageBuilding()
+    local button;
+    
+    table.insert(BuildingUI, windowHandler:addText(1,3,'Floor', colors.white, colors.black, Window));
+    button = windowHandler:addButton(1, 5, 'x', colors.white, colors.green, 2, 2, Window);
+    toggleEvent = windowHandler:getEventHandler(button, "Toggle");
+    _ = toggleEvent + Toggle;
+    button.parameter = button;
+    table.insert(BuildingUI,button);
+    
+    table.insert(BuildingUI, windowHandler:addText(16,3,'Walls', colors.white, colors.black, Window));
+    button = windowHandler:addButton(16, 5, 'x', colors.white, colors.green, 2, 2, Window);
+    toggleEvent = windowHandler:getEventHandler(button, "Toggle");
+    _ = toggleEvent + Toggle;
+    button.parameter = button;
+    table.insert(BuildingUI,button);
+
+    table.insert(BuildingUI, windowHandler:addText(31,3,'Ceiling', colors.white, colors.black, Window));
+    button = windowHandler:addButton(31, 5, 'x', colors.white, colors.green, 2, 2, Window);
+    toggleEvent = windowHandler:getEventHandler(button, "Toggle");
+    _ = toggleEvent + Toggle;
+    button.parameter = button;
+    table.insert(BuildingUI,button);
+
+    button = windowHandler:addButton(WindowWith - 7, 10, 'Start', colors.green, colors.white, 6, 2, Window)
+    startEvent = windowHandler:getEventHandler(button, "Next");
+    _ = startEvent + start;
+    table.insert(BuildingUI,button);
 end
 
 function Init()
-    local width, height = term.current().getSize();
-    Window = windowHandler:createWindow(term.current(), 1, 1, width, height, "window");
+    WindowWith, WindowHeight = term.current().getSize();
+    Window = windowHandler:createWindow(term.current(), 1, 5, WindowWith, WindowHeight, "window");
     InfoWindow = windowHandler:createWindow(Window, 1, 9, 15, 4, "InfoBox");
-    windowHandler:addBox(1, 1, colors.yellow, 15,4, InfoWindow);
-    windowHandler:addText(1,1, "1. Slot Fuel", colors.black, colors.yellow, InfoWindow);
-    windowHandler:addText(1,2, "2. Slot Ground", colors.black, colors.yellow, InfoWindow);
-    windowHandler:addText(1,3, "3. Slot Walls", colors.black, colors.yellow, InfoWindow);
-    windowHandler:addText(1,4, "4. Slot Ceiling", colors.black, colors.yellow, InfoWindow);
-    
+    manageInfoBox();
+    readXYZ();
 
-    -- print("Parameter: Forward, Left, Height");
-    -- print("Enter:");
-    -- initX, initY, initZ = read();
-    
-    -- initX = nil~=initX and initX or 1;
-    -- initY = nil~=initY and initY or 1;
-    -- initZ = nil~=initZ and initZ or 1;
-    
-    -- step = step + 1;
-
-
-    Line1 = windowHandler:addText(1, 1, 'Forward?', colors.white, colors.black, Window);
-    windowHandler:drawAllWindows();
-    term.setCursorPos(1,2);
-    initX = read() or 1;
-    Line1 = windowHandler:addText(1, 1, 'Left?', colors.white, colors.black, Window);
-    windowHandler:drawAllWindows();
-    term.setCursorPos(1,2);
-    initY = read() or 1;
-    Line1 = windowHandler:addText(1, 1, 'Height (Going up)?', colors.white, colors.black, Window);
-    windowHandler:drawAllWindows();
-    term.setCursorPos(1,2);
-    initZ = read() or 1;
-    toggleButton = windowHandler:addButton(width - 4, 5, 'x', colors.white, colors.green, 3, 3, Window);
-    toggleEvent = windowHandler:getEventHandler(toggleButton, "Toggle");
-    _ = toggleEvent + Toggle;
-
-    NextButton = windowHandler:addButton(width - 7, 10, 'Next', colors.green, colors.white, 6, 2, Window)
-    nextEvent = windowHandler:getEventHandler(NextButton, "Next");
-    _ = nextEvent + start;
-
+    manageBuilding();
     
     windowHandler:drawAllWindows();
-    -- windowHandler:listenToEvents(0.1);
-    
-
+    windowHandler:listenToEvents(0.1);
 end
 
 

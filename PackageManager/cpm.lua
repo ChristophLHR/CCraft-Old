@@ -27,19 +27,21 @@ cpm = {}
 
 cpm.Programms = 
 {
-    ["EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/EventHandlerv2.lua", code = "HiG0dTbR", path = "API/EventHandler.lua", requ = "API/EventHandler"},
-    ["DependenciesScript"] = {code = "qndnG9Q6", path = "API/DependenciesScript.lua", requ = "API/DependenciesScript"},
+    ["EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/EventHandlerv2.lua", code = "HiG0dTbR", path = "API/EventHandler.lua"},
     ["OOP"] = {gitDownload = "ChristophLHR/CCraft/main/Basics/OOP.lua", code = "eERx21wN", path = "API/OOP.lua", requ = "API/OOP"},
-    ["WindowHandler"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/WindowHandler.lua", code = "x4EPvTUZ", path = "API/windowHandler.lua", requ = "API/windowHandler"},
-    ["guiDrawSelf"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/GUIDrawSelf.lua", code = "aNFsa3B5", path = "API/guiDrawSelf.lua", requ = "API/guiDrawSelf"},
+    ["WindowHandler"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/WindowHandler.lua", code = "x4EPvTUZ", path = "API/windowHandler.lua"},
+    ["guiDrawSelf"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/GUIDrawSelf.lua", code = "aNFsa3B5", path = "API/guiDrawSelf.lua"},
     ["CreateModRequestUI"] = {code = "6ek7uPec", path = "CreateModRequestUI.lua"},
     ["turtleController"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/TurtleControler.lua", code = "5U5LaGwD", path = "API/turtleController.lua"},
     ["quarry"] = {code = "8xUKSSAZ", path = "quarry.lua"},
     ["Wood"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/WoodChuck.lua",code = "0aNYtYhe", path = "wood.lua"},
     ["QuarryInterface"] = {code = "gi79PfVh", path = "API/QuarryInterface.lua"},
-    ["Quarry"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Quarry.lua", path = "Quarry"},
+    ["TrackInterface"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Track/TrackInterface.lua" , path = "API/TrackInterface.lua"},
+    ["Quarry"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Quarry.lua", path = "Quarry.lua"},
+    ["Track"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Track/Track.lua", path = "Track.lua"},
     ["cpm"] = {gitDownload = "ChristophLHR/CCraft/main/PackageManager/cpm.lua", path = "cpm.lua"},
     ["GitInstaller"] = {code = "493LbAC4", path = "GitInstaller.lua"},
+
 }
 
 cpm.commands = {
