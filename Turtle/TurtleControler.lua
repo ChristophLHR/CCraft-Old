@@ -208,7 +208,7 @@ function turtleController:findFuel()
 
 end
 
-function findItemInInventory(searchedItem)
+function turtleController:findItemInInventory(searchedItem)
 
     local compFunc = function(slot, sItem)
         local item = turtle.getItemDetail(slot)
