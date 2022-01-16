@@ -47,6 +47,22 @@ cpm.commands = {
     ["update "] = cpm.Programms
 }
 
+function cpm.download(fileName, url)
+    local request = http.get(url);
+    if (request == nil or request.getResponseCode() ~= 200) then return false end;
+    
+    local file = fs.open(fileName, "w");
+    if(file == nil) then return false end;
+    
+    local content = request.readAll();
+    file.write(content);
+    file.close();
+    return true;
+end;
+
+function cpm.gitDownload(fileName, url)
+    return cpm.download(fileName,"https://raw.githubusercontent.com/"..url);
+end;
 
 local function fillOut(shell, index, argument, previous)
     local currArg = cpm.commands
@@ -136,22 +152,5 @@ end
 function cpm.install(dependency)
     install(dependency)
 end
-
-function cpm.download(fileName, url)
-    local request = http.get(url);
-    if (request == nil or request.getResponseCode() ~= 200) then return false end;
-    
-    local file = fs.open(fileName, "w");
-    if(file == nil) then return false end;
-    
-    local content = request.readAll();
-    file.write(content);
-    file.close();
-    return true;
-end;
-
-function cpm.gitDownload(fileName, url)
-    return cpm.download(fileName,"https://raw.githubusercontent.com/"..url);
-end;
 
 return cpm
