@@ -162,6 +162,7 @@ function turtleController:tryAction(string)
 end
 
 
+
 function turtleController:findItem(compareFunction, searchedItem)
     -- searchedItem is optional. Could be a string, table or whatever the CompareFunction needs
     local currentSlot = turtle.getSelectedSlot()
@@ -205,6 +206,18 @@ function turtleController:findFuel()
     local compareFunc = function(slot) turtle.select(slot) return turtle.refuel(0) end
     return self:findItem(compareFunc)
 
+end
+
+function findItemInInventory(searchedItem)
+
+    local compFunc = function(slot, sItem)
+        local item = turtle.getItemDetail(slot)
+        if(item == nil) then return false end
+        if(item.name == sItem) then return true end
+        return item.name == sItem.name
+    end
+
+    return self:findItem(compFunc, searchedItem)
 end
 
 function turtleController:inspect()

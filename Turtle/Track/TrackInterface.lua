@@ -46,7 +46,7 @@ local function readXYZ()
     table.insert(DirectionInfo, windowHandler:addText(1, 1, 'Forward?', colors.white, colors.black, Window));
     windowHandler:drawAllWindows();
     term.setCursorPos(25,1);
-    Values.Forward = read() or 1;
+    Values.Forward = tonumber(read() or 1);
     table.insert(DirectionInfo, windowHandler:addText(25, 1, Values.Forward, colors.white, colors.black, Window));
 end;
 
