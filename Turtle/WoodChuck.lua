@@ -96,7 +96,7 @@ local function run()
         suckLoot();
         dropLoot();
         print('Sleeping 500 seconds');
-        sleep(5);
+        sleep(500);
         
     end
 end
