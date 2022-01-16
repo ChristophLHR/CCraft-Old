@@ -11,9 +11,9 @@ installer.install(dependencies);
 
 -- local pretty = require("cc.pretty")
 package.loaded.guiDrawSelf = nil
-local GuiDrawSelf = require(installer.Programms["guiDrawSelf"].requ)
+local GuiDrawSelf = require(installer.Programms["guiDrawSelf"].path)
 
-local EventHandler = require(installer.Programms["EventHandler"].requ)
+local EventHandler = require(installer.Programms["EventHandler"].path)
 
 function windowHandler:addWindowAsMonitor (monitorPosition, windowName, oldWindow)
 

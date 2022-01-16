@@ -8,7 +8,7 @@ installer.install(dependencies);
 
 
 -- ---> Class Defenition
-OOP = require(installer.Programms["OOP"].requ)
+OOP = require(installer.Programms["OOP"].path)
 
 Event = OOP.class(function(ref,name, callbacks)
     ref.name = name
