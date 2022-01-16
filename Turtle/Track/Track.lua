@@ -26,7 +26,7 @@ function run()
     fuelSlot = turtle.getItemDetail(1);
     buildBlock = turtle.getItemDetail(2);
     trackSlot = turtle.getItemDetail(3);
-
+    tControler:tryMove('tA');
     while(interface.Values.Forward > 0) do
         turtle.select(tControler:findSlot(buildBlock));
         turtle.placeDown();
