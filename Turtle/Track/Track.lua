@@ -30,12 +30,11 @@ function run()
     while(interface.Values.Forward > 0) do
         turtle.select(tControler:findItemInInventory(buildBlock));
         turtle.placeDown();
-        tControler:moveBack(1);
+        tControler:goBack(1);
         turtle.select(tControler:findItemInInventory(trackSlot));
         turtle.place();
         interface.Values.Forward = interface.Values.Forward - 1;
-        print('Steps left'..interface.Values.Forward);
-
+        print('Steps left '..interface.Values.Forward);
     end
 end
 

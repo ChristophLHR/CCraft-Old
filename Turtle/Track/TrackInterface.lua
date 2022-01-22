@@ -51,10 +51,10 @@ local function readXYZ()
 end;
 
 local function manageInfoBox()
-    table.insert(InfoText, windowHandler:addBox(1, 1, colors.yellow, 15,4, InfoWindow));
-    table.insert(InfoText, windowHandler:addText(1,1, "1. Slot Fuel", colors.black, colors.yellow, InfoWindow));
-    table.insert(InfoText, windowHandler:addText(1,2, "2. Slot Ground", colors.black, colors.yellow, InfoWindow));
-    table.insert(InfoText, windowHandler:addText(1,3, "3. Slot Track", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addBox(1, 1, colors.yellow, 15,5, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(2,1, "1. Slot Fuel", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(3,2, "2. Slot Ground", colors.black, colors.yellow, InfoWindow));
+    table.insert(InfoText, windowHandler:addText(4,3, "3. Slot Track", colors.black, colors.yellow, InfoWindow));
 end;
 
 local function manageBuilding()
@@ -68,7 +68,7 @@ end;
 function Init()
     WindowWith, WindowHeight = term.current().getSize();
     Window = windowHandler:createWindow(term.current(), 1, 1, WindowWith, WindowHeight, "window");
-    InfoWindow = windowHandler:createWindow(Window, 1, 9, 15, 4, "InfoBox");
+    InfoWindow = windowHandler:createWindow(Window, 1, 8, 15, 4, "InfoBox");
     manageInfoBox();
     readXYZ();
 

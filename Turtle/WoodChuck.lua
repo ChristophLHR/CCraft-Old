@@ -34,6 +34,7 @@ local function cutTree()
             tControler:goDown(1);
             height = height - 1;
         end
+        tControler:tryMove("b");
         local select = turtle.getSelectedSlot();
         turtle.select(2);
         turtle.place();
