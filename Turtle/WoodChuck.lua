@@ -42,24 +42,6 @@ local function cutTree()
     end
 end
 
-local function suckLoot()
-
-    tControler:tryMove('b');
-    tControler:tryMove('b');
-    tControler:tryMove('d');
-    tControler:tryMove('d');
-    tControler:tryMove('d');
-    tControler:tryMove('d');
-    while(turtle.suckDown()) do end;
-    tControler:tryMove('u');
-    tControler:tryMove('u');
-    tControler:tryMove('u');
-    tControler:tryMove('u');
-    tControler:tryMove('f');
-    tControler:tryMove('f');
-
-end
-
 local function dropLoot()
 
     local select = turtle.getSelectedSlot();
