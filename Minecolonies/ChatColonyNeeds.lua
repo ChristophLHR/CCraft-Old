@@ -1,16 +1,18 @@
 Box = peripheral.find("chatBox");
 C = peripheral.find("colonyIntegrator");
 
-Main();
+Actions = {
+    ["Info"] = function (username) GetInfos(username) end,
+    ["Req"] = function (username, message)  end,
+}
 
-function Main()
-
-        while true do
-            local _, username, message = os.pullEvent("chat");
-            CheckAction(username, message)
-        end
-
-end;
+function Split(s, delimiter)
+    local result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
 
 function CheckAction(username, message)
     print(username.. " wrote ".. message);
@@ -19,11 +21,6 @@ function CheckAction(username, message)
         Actions[message[1]](username, message);
     end
 end;
-
-Actions = {
-    ["Info"] = function (username) GetInfos(username) end,
-    ["Req"] = function (username, message)  end,
-}
 
 function GetInfos(username)
     local t = C.getWorkOrders();
@@ -41,12 +38,11 @@ function GetReq(username, message)
     end
 end
 
-
-
-function Split(s, delimiter)
-    local result = {};
-    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-        table.insert(result, match);
+function Main()
+    while true do
+        local _, username, message = os.pullEvent("chat");
+        CheckAction(username, message)
     end
-    return result;
-end
+end;
+
+Main();
