@@ -25,10 +25,8 @@ end;
 function GetInfos(username)
     local t = C.getWorkOrders();
     for _,v in pairs(t) do
-        print(username);
-        print(v.id);
-        print(v.type);
-        Box.sendMessageToPlayer(v.id, username,v.type);
+        print(username.." ".. v.id .. " " .. v.type);
+        Box.sendMessageToPlayer(tostring(v.id), username,v.type);
     end
 end
 
@@ -36,7 +34,7 @@ function GetReq(username, message)
     local t = C.getWorkOrderResources(message[2]);
     for _,v in pairs(t) do
         if v.needed > 0 then
-            Box.sendMessageToPlayer(v.needed, username, v.displayName);
+            Box.sendMessageToPlayer(tostring(v.needed), username, v.displayName);
         end
     end
 end
