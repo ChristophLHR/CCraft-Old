@@ -17,7 +17,7 @@ end
 function CheckAction(username, message)
     print(username.. " wrote ".. message);
     message = Split(message, " ");
-    if Actions[message[1]] == type("function") then
+    if type(Actions[message[1]]) == "function" then
         Actions[message[1]](username, message);
     end
 end;
