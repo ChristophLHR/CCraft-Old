@@ -27,6 +27,7 @@ cpm = {}
 
 cpm.Programms = 
 {
+    ["ChatColony"] = {gitDownload = "ChristophLHR/CCraft/main/Minecolonies/ChatColonyNeeds.lua", path = "ChatColony.lua"}
     ["EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/EventHandlerv2.lua", code = "HiG0dTbR", path = "API/EventHandler.lua"},
     ["OOP"] = {gitDownload = "ChristophLHR/CCraft/main/Basics/OOP.lua", code = "eERx21wN", path = "API/OOP.lua", requ = "API/OOP"},
     ["WindowHandler"] = {gitDownload = "ChristophLHR/CCraft/main/GUI%20Stuff/WindowHandler.lua", code = "x4EPvTUZ", path = "API/windowHandler.lua"},
@@ -41,8 +42,8 @@ cpm.Programms =
     ["Track"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Track/Track.lua", path = "Track.lua"},
     ["cpm"] = {gitDownload = "ChristophLHR/CCraft/main/PackageManager/cpm.lua", path = "cpm.lua"},
     ["GitInstaller"] = {code = "493LbAC4", path = "GitInstaller.lua"},
-
 }
+-- pastebin run "https://raw.githubusercontent.com/ChristophLHR/CCraft/main/PackageManager/cpm.lua" "cpm.lua" "run"
 
 cpm.commands = {
     ["install "] = cpm.Programms,
