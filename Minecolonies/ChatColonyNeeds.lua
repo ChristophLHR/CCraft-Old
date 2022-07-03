@@ -25,7 +25,7 @@ end;
 function GetInfos(username)
     local t = C.getWorkOrders();
     for _,v in pairs(t) do
-        print(username.." ".. v.id .. " " .. v.type);
+        print(username.." ".. v.id .. " " .. v.type.. "!");
         Box.sendMessageToPlayer(tostring(v.id), username,v.type);
     end
 end
@@ -42,7 +42,7 @@ end
 function Main()
     while true do
         local _, username, message = os.pullEvent("chat");
-        CheckAction(username, message)
+        CheckAction(username, message);
     end
 end;
 
