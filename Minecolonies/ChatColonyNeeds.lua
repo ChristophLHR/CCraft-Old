@@ -25,6 +25,9 @@ end;
 function GetInfos(username)
     local t = C.getWorkOrders();
     for _,v in pairs(t) do
+        print(username);
+        print(v.id);
+        print(v.type);
         Box.sendMessageToPlayer(v.id, username,v.type);
     end
 end
