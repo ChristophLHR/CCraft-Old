@@ -24,14 +24,14 @@ end;
 
 function GetInfos(username)
     local t = C.getWorkOrders();
-    for _,v in t do
+    for _,v in pairs(t) do
         Box.sendMessageToPlayer(v.id, username,v.type);
     end
 end
 
 function GetReq(username, message)
     local t = C.getWorkOrderResources(message[2]);
-    for _,v in t do
+    for _,v in pairs(t) do
         if v.needed > 0 then
             Box.sendMessageToPlayer(v.needed, username, v.displayName);
         end
