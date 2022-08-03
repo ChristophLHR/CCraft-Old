@@ -1,3 +1,4 @@
+---@class turtleController
 local turtleController = {}
 -- Important: Errorhandler as a Callback in Key: "errorHandler"
 -- TODOS: SaveStates.
@@ -162,7 +163,6 @@ function turtleController:tryAction(string)
 end
 
 
-
 function turtleController:findItem(compareFunction, searchedItem)
     -- searchedItem is optional. Could be a string, table or whatever the CompareFunction needs
     local currentSlot = turtle.getSelectedSlot()
@@ -199,7 +199,6 @@ function turtleController:compareInspect(compareItemA, compareItemB)
     return iName == bName;
 
 end
-
 
 function turtleController:findFuel()
 
