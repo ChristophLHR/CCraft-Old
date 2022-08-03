@@ -92,6 +92,9 @@ function install(dependency)
     -- print("All => ", pretty.pretty(dependency))
     local prog = cpm.Programms
     if type(dependency) == "string" then
+        if (prog[dependency] == nil) then
+            error(dependency.." not found");
+        end
         installOne(prog[dependency])
     elseif type(dependency) == "table" then
         for _, dep in pairs(dependency) do
@@ -100,6 +103,9 @@ function install(dependency)
                 -- print("Code ",pretty.pretty(dep.code),"Path ", pretty.pretty(dep.path))
                 installOne(dep)
             elseif (type(dep) == "string") then
+                if (prog[dep] == nil) then
+                    error(dep.." not found");
+                end
                 installOne(prog[dep])
             end
 
@@ -120,6 +126,8 @@ function installOne(dependencies)
             end
         elseif (dependencies.code ~=nil) then
             shell.run("pastebin", "run", "FuQ3WvPs "..dependencies.code.." "..dependencies.path);
+        else
+            error("Missing path / gitDownload");
         end
     end
     io.close(f)
