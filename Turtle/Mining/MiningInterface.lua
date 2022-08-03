@@ -7,7 +7,7 @@ installer.install(dependencies)
 
 ---@class windowHandler
 local w = require("API/windowHandler");
-local Miner = require("API/MiningScript.lua");
+local Miner = require("API/MiningScript");
 
 local window, infoText;
 ---@class EventHandler
