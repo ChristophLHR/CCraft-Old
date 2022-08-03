@@ -1,7 +1,6 @@
 local dependencies = {
     "turtleController",
 }
-
 local installer = require("cpm")
 installer.install(dependencies)
 
@@ -11,7 +10,7 @@ tControler = require("API/turtleController")
 
 --Normal Mining
 local function stripMine()
-
+    
 end
 
 
