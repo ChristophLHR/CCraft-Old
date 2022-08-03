@@ -1,5 +1,5 @@
 -- ToDo: Beim neuzeichnen der Elemente fragen ob ein element sich hinter dem Pixel befindet, um im anschluss das Entsprechende Element neu zu Zeichnen
-
+---@class windowHandler
 windowHandler = {windows = {}, continueListener = false, drawChanges = false, windowIDMax = 0}
 
 local dependencies = {
@@ -200,7 +200,9 @@ function windowHandler:editBaseObject(object, x, y, width, height)
     return object
 
 end
-
+---@param object table Element on a Window
+---@param eventName string
+---@return EventHandler
 function windowHandler:getEventHandler(object, eventName)
     if(object.event==nil)then
         object.event = EventHandler(eventName or "ClickEvent")
@@ -381,7 +383,9 @@ function windowHandler:moveWindow(window, moveXBy, moveYBy)
     window.reposition(x + moveXBy, y + moveYBy)
 
 end
-
+---comment
+---@param tickRate any
+---@param dragTimer any
 function windowHandler:listenToEvents(tickRate, dragTimer)
     -- Event are:
     -- Timouts (at which the elements will be redrawn)

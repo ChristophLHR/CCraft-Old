@@ -1,9 +1,9 @@
 Box = peripheral.find("chatBox");
 C = peripheral.find("colonyIntegrator");
-
+Pretty = require("cc.pretty");
 Actions = {
     ["Info"] = function (username) GetInfos(username) end,
-    ["Req"] = function (username, message)  end,
+    ["Req"] = function (username, message) GetReq(username, message) end,
 }
 
 function Split(s, delimiter)
@@ -27,14 +27,18 @@ function GetInfos(username)
     for _,v in pairs(t) do
         print(username.." ".. v.id .. " " .. v.type.. "!");
         Box.sendMessageToPlayer(tostring(v.id), username,v.type);
+        os.sleep(1);
     end
 end
 
 function GetReq(username, message)
-    local t = C.getWorkOrderResources(message[2]);
+    local t = C.getWorkOrderResources(tonumber(message[2]));
+    print(Pretty.pretty(t));
     for _,v in pairs(t) do
-        if v.needed > 0 then
+        print((v.displayName) .. " needed: " ..v.needed);
+        if( v.needed > 0 )then
             Box.sendMessageToPlayer(tostring(v.needed), username, v.displayName);
+            os.sleep(1);
         end
     end
 end
