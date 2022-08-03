@@ -1,12 +1,12 @@
 local dependencies = {
     "MiningScript",
-    "windowHandler"
+    "WindowHandler"
 }
 local installer = require("cpm")
 installer.install(dependencies)
 
 ---@class windowHandler
-local w = require("API/windowHandler")
+local w = require("API/windowHandler");
 local Miner = require("API/MiningScript.lua");
 
 local window, infoText;
