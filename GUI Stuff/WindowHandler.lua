@@ -1,6 +1,7 @@
--- ToDo: Beim neuzeichnen der Elemente fragen ob ein element sich hinter dem Pixel befindet, um im anschluss das Entsprechende Element neu zu Zeichnen
+--- ToDo: Beim neuzeichnen der Elemente fragen ob ein element sich hinter dem Pixel befindet, um im anschluss das Entsprechende Element neu zu Zeichnen
+--- | Info: window.skip
 ---@class windowHandler
-windowHandler = {windows = {}, continueListener = false, drawChanges = false, windowIDMax = 0}
+windowHandler = {windows = {}, continueListener = false, drawChanges = false, windowIDMax = 0, devMode = false, trace = false}
 
 local dependencies = {
     "guiDrawSelf",
@@ -204,6 +205,14 @@ end
 ---@param eventName string
 ---@return EventHandler
 function windowHandler:getEventHandler(object, eventName)
+    if type(object) ~= "table" then
+        self:errorHandler(
+            "[WindowHandler]: Can only add EventHandler to Table-Objects. Got Type: "
+            ..type(object)
+        )
+        return
+    end
+    -- assert(type(object) ~= table, "[WindowHandler]: Can only add EventHandler to Table-Objects")
     if(object.event==nil)then
         object.event = EventHandler(eventName or "ClickEvent")
     end
@@ -308,12 +317,16 @@ function windowHandler:drawObjectOnWindow(window, object)
         GuiDrawSelf[object.type](GuiDrawSelf,window, object, self)
         
     else
-
         self:printDev("Object not fully set.")
+        self:printDev(object.x)
+        self:printDev(object.y)
+        self:printDev(object.width)
+        self:printDev(object.height)
         self:printDev("Object requires x,y,width and height")
         self:printDev("And some other stuff maybe, API is still WIP :P")
 
-        self:printError(object)
+        self:printError(object);
+        os.sleep(3);
 
     end
 
@@ -360,7 +373,9 @@ function windowHandler:drawAllWindows()
     -- reset all Windows first
     for key, window in pairs(self.windows) do
 
-        window.clear()
+        if not window.skip then
+            window.clear()
+        end
 
     end
 
@@ -384,8 +399,8 @@ function windowHandler:moveWindow(window, moveXBy, moveYBy)
 
 end
 ---comment
----@param tickRate number in seconds - Updatetimer for Screen(s)
----@param dragTimer number in secons - If drag enabled, how long after a click is a drag event
+---@param tickRate any
+---@param dragTimer any
 function windowHandler:listenToEvents(tickRate, dragTimer)
     -- Event are:
     -- Timouts (at which the elements will be redrawn)
@@ -624,13 +639,12 @@ end
 function windowHandler:printError(text)
 
     self:printDev(text)
-    sleep(4)
     self:printDev(debug.traceback())
 
 end
 
 function windowHandler:printDev(text)
-    if not self.devMode then return end;
+    if not self.devMode and not self.trace then return end;
 
     local native = term.native()
     local x, y = native.getCursorPos()
@@ -641,19 +655,42 @@ function windowHandler:printDev(text)
     else
         y = y + 1
     end
-    -- windowHandler:writeAt(1,y,tostring(text), native)
-    windowHandler:writeAt(1,y, debug.traceback(text), native)
-    os.sleep(3);
+    if self.trace then
+        windowHandler:writeAt(1,y, debug.traceback(text), native)
+    else
+        windowHandler:writeAt(1,y,tostring(text), native)
+    end
+end
+
+function windowHandler:errorHandler(error)
+    term.clear();
+    term.setCursorPos(1,1);
+    if self.devMode or self.trace then print("Error: "..error) end;
+    error(error)
+end
+
+function windowHandler:writeToWindow(text, window)
+    local ww, wh = window.getSize()
+    local x, y = window.getCursorPos();
+    if wh >= y then
+        y = 0
+    end
+    window.setCursorPos(1,y + 1)
+    window.write(text);
 end
 
 function countKeyValueTable(t) 
+
     local count = 0
 
-    for _, _ in pairs(t) do
+    for _,_ in pairs(t) do
+
         count = count + 1
+
     end
 
     return count
+
 end
 
 function convertColors(color)
