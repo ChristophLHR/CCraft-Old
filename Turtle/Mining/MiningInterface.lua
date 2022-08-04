@@ -42,8 +42,8 @@ local function initWindow()
     inputText = w:addText(width - #txt - 2, height - 6, txt, colors.white, nil, window);
     local e = w:getEventHandler(inputText, "Read");
     _ = e + read;
-
-    w:listenToEvents();
+    
+    w:listenToEvents(1, 1);
 end
 
 initWindow();

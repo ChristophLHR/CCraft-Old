@@ -384,8 +384,8 @@ function windowHandler:moveWindow(window, moveXBy, moveYBy)
 
 end
 ---comment
----@param tickRate any
----@param dragTimer any
+---@param tickRate number in seconds - Updatetimer for Screen(s)
+---@param dragTimer number in secons - If drag enabled, how long after a click is a drag event
 function windowHandler:listenToEvents(tickRate, dragTimer)
     -- Event are:
     -- Timouts (at which the elements will be redrawn)
@@ -630,9 +630,10 @@ function windowHandler:printError(text)
 end
 
 function windowHandler:printDev(text)
-    
+    if not self.devMode then return end;
+
     local native = term.native()
-    local x,y = native.getCursorPos()
+    local x, y = native.getCursorPos()
     local maxX, maxY = native.getSize()
     if y >= maxY - 1 then
         native.scroll(1)
@@ -640,22 +641,19 @@ function windowHandler:printDev(text)
     else
         y = y + 1
     end
-    windowHandler:writeAt(1,y,tostring(text), native)
-
+    -- windowHandler:writeAt(1,y,tostring(text), native)
+    windowHandler:writeAt(1,y, debug.traceback(text), native)
+    os.sleep(3);
 end
 
 function countKeyValueTable(t) 
-
     local count = 0
 
-    for _,_ in pairs(t) do
-
+    for _, _ in pairs(t) do
         count = count + 1
-
     end
 
     return count
-
 end
 
 function convertColors(color)

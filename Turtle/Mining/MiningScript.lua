@@ -10,7 +10,7 @@ tControler = require("API/turtleController")
 
 --Normal Mining
 local function stripMine()
-
+    
 end
 
 
