@@ -38,3 +38,5 @@ function CCEventHander:start()
         end
     end
 end
+
+return CCEventHander
