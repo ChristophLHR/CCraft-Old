@@ -356,6 +356,7 @@ function windowHandler:drawAllWindowObjects(window)
 end
 
 function windowHandler:drawChildren(w)
+    if w.skip then return end;
 
     self:drawAllWindowObjects(w)
     if(w.children) then
@@ -672,10 +673,11 @@ end
 function windowHandler:writeToWindow(text, window)
     local ww, wh = window.getSize()
     local x, y = window.getCursorPos();
-    if wh >= y then
-        y = 0
+    if wh <= y + 1 then
+        -- window.clear()
+        y = 1
     end
-    window.setCursorPos(1,y + 1)
+    window.setCursorPos(2,y + 1)
     window.write(text);
 end
 

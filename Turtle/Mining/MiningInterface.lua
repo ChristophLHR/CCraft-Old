@@ -27,9 +27,11 @@ local function updateInterFace()
         "X: "..miner.currentX.."/"..miner.goalX..
         " | Y: "..miner.currentY.."/"..miner.goalY
 
-    w:editText(infoText, debugWidth, 1 ,txt, nil, nil);
+    w:editText(infoText, 3, 1 ,txt, nil, nil);
     w.drawChanges = true;
-    w.writeToWindow(txt, debugWindow);
+    w:writeToWindow(txt, debugWindow);
+    -- w:writeToWindow(tostring(debugWidth).." / "..tostring(width), debugWindow)
+
 end
 
 local function startWindowListener()
@@ -52,7 +54,7 @@ local  function getInput()
     while test ~= "getInput" do
         test = os.pullEvent()
     end
-    window.setCursorPos(inputText.x, inputText.y);
+    debugWindow.skip = true;
     w:editText(inputText, nil, nil, "reading...", nil, nil);
     w.drawChanges = true;
     local input
@@ -71,18 +73,18 @@ local function initWindow()
     
     w.devMode = true;
     width, height = term.getSize();
-    debugWidth = 15;
+    debugWidth = width / 2;
     width = width - debugWidth;
     debugHeight = height;
-    window = w:createWindow(term.current(), debugWidth, 1, width, height, "Main");
+    window = w:createWindow(term.current(), debugWidth + 1, 1, width, height, "Main");
     
-    infoText = w:addText(1, 2 , "Needs:", colors.white, nil, window);
+    infoText = w:addText(3, 2 , "Needs:", colors.white, nil, window);
     local txt = "Start";
     startButton = w:addButton(width - #txt - 4, height - 8, txt, colors.white, colors.red, #txt + 2, 3, window);
 
     startEvent = w:getEventHandler(startButton, "Start");
     
-    txt = "<insert No. of Blocks>";
+    txt = "<Edit No. of Blocks>";
     inputText = w:addText(width - #txt - 2, height - 10, txt, colors.white, nil, window);
 
     local inputF = function()
@@ -96,9 +98,9 @@ local function initWindow()
 
     -- debug
     debugWindow = w:createWindow(term.current(), 1, 1, debugWidth, debugHeight, "Debug");
-    debugWindow.skip = true;
     w:addBox(1, 1, colors.red, debugWidth - 1, debugHeight - 1, debugWindow);
-    w:addBox(2, 2, colors.black, debugWidth - 2, debugHeight - 2, debugWindow);
+    w:addBox(2, 2, colors.black, debugWidth - 3, debugHeight - 3, debugWindow);
+    debugWindow.setCursorPos(2,2);
     
     eHandler:add(startWindowListener);
     getInput();
