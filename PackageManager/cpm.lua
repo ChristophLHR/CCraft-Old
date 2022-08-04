@@ -27,7 +27,7 @@ cpm = {}
 
 cpm.Programms = 
 {
-    ["CCEventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/CCEventHandler.lua", path = "CC-EventHandler.lua"},
+    ["CC-EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/CCEventHandler.lua", path = "API/CC-EventHandler.lua"},
     ["MiningScript"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Mining/MiningScript.lua", path="API/MiningScript.lua"},
     ["MiningInterFace"] = {gitDownload = "ChristophLHR/CCraft/main/Turtle/Mining/MiningInterface.lua",  path = "Mining.lua"},
     ["ChatColony"] = {code = "dnxDhTPa", gitDownload = "ChristophLHR/CCraft/main/Minecolonies/ChatColonyNeeds.lua", path = "ChatColony.lua"},
