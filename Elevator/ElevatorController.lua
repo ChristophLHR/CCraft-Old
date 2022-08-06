@@ -187,12 +187,10 @@ function goTo(number)
             -- Timers 
 
             local timerID = os.startTimer(1)
-            while true do
+            while timerID == 0 do
                 event = {os.pullEvent("timer")}
                 if event[2] == timerID then
-                    print("Timer 6")
-                    --dostuff
-                    timerID = os.startTimer(6)
+                    timerID = 0;
                 end
             end
             rs.setOutput("right",false)
@@ -201,9 +199,8 @@ function goTo(number)
             while true do
                 event = {os.pullEvent("timer")}
                 if event[2] == timerID then
-                    print("Timer 6")
                     --dostuff
-                    timerID = os.startTimer(6)
+                    timerID = 0;
                 end
             end
             upDateFloors()
