@@ -1,5 +1,12 @@
+local dependencies = {
+    "WindowHandler",
+    "FloorController"
+}
+installer.install(dependencies);
+
 ---@class windowHandler
 w = require("API/windowHandler")
+---@class FloorController
 f = require("API/floorController")
 
 pretty = require("cc.pretty")
