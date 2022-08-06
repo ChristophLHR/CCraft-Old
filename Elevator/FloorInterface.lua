@@ -213,15 +213,11 @@ function run()
     parallel.waitForAny(
         function ()
             local status, error = pcall(f.listenToNetworkEvents, f, listenToNetwork, _, {update = refreshElevatorStats, updateFloors = updateUI})
-            if status == false then
                 print(error);
-            end
         end,
         function ()
             local status, error = pcall(w.listenToEvents, w, 0.1, 0.3)
-            if status == false then
                 print(error);
-            end
         end
     )
 
