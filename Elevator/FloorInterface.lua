@@ -65,8 +65,12 @@ function addFloor(number)
     local y = (yMod * bSize) + (1 * yMod) + 1 -- Position X für Button
     
     local btnText = tostring(number)
-    
-    table.insert( floorButtons, w:addButton(x, y, btnText, colors.white, colors.orange, bSize - 1, bSize - 1 , dragableWindow, goTo, number))
+    local button = w:addButton(x, y, btnText, colors.white, colors.orange, bSize - 1, bSize - 1 , dragableWindow);
+    local e = w:getEventHandler(button);
+    _ = e + goTo;
+    button.parameter = number;
+
+    table.insert( floorButtons, button)
 
 
 end
@@ -191,7 +195,9 @@ function updateUI()
 
     -- call Button (-1 bc of the padding of the buttons)
     if(f.config.isClient) then
-        callButton = w:addButton(1, windowHeight - 4, "Call", colors.white, colors.green, windowWidth - 10 - 1, 4, parentWindow, callButtonEvent)
+        callButton = w:addButton(1, windowHeight - 4, "Call", colors.white, colors.green, windowWidth - 10 - 1, 4, parentWindow)
+        local e = w:getEventHandler(callButton, "CallButton");
+        _ = e + callButtonEvent;
         stateButton = w:addButton(windowWidth - 8 - 1, windowHeight - 4, "Status", colors.white, colors.red, 10, 4, parentWindow)
     else
         stateButton = w:addButton(1, windowHeight - 4, "Status", colors.white, colors.red, windowWidth, 4, parentWindow)

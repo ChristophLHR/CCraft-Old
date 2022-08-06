@@ -202,7 +202,7 @@ function windowHandler:editBaseObject(object, x, y, width, height)
 
 end
 ---@param object table Element on a Window
----@param eventName string
+---@param eventName? string
 ---@return EventHandler
 function windowHandler:getEventHandler(object, eventName)
     if type(object) ~= "table" then

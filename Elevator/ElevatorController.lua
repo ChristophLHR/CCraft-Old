@@ -107,20 +107,18 @@ local function addFloorFunction()
 end
 
 function listenToEvents()
-
-
     while true do
-
         event, side, channel, rpyChannel, message = os.pullEvent()
         if(event == "modem_message") then
             if(message and type(message) == "table") then
                 if(message.command) then
 
                     if(message.command == "goTo") then
-
+                        print("Goint to: "..message.args.floor);
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
                         -- sleep Event within
                         -- goToEvent:queueEvent({"goTo", message.args.floor})
+                        goToEvent:add(goTo);
                         goToEvent:invoke(message.args.floor);
 
                     elseif(message.command == "update") then
@@ -130,25 +128,18 @@ function listenToEvents()
                     elseif(message.command == "init") then
                         -- sleep Event within
                         -- goToEvent:queueEvent({"init", message.args})
+                        initEvent:add(initFloors)
                         initEvent:invoke(message.args);
                     else
-
                         print("unkown Command:")
                         print(message.command)
-
                     end
-
                 else
-                    
                     print("message does not contain a command:")
                     print(message)
-
                 end
-
             else
-
                 print("No Message")
-
             end
         end
     end
@@ -170,48 +161,32 @@ function goTo(number)
         tFloorInfo.goalFloor = number
         
         while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
-
             -- Invert the Flow ( Go either up or down )
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
-                
                 rs.setOutput("back", false)
                 tFloorInfo.currentFloor = tFloorInfo.currentFloor + 1
-                
             else
-                
                 rs.setOutput("back",true)
                 tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
-                
             end
             rs.setOutput("right", true)
             -- Timers 
-
             local timerID = os.startTimer(1)
-            print("timerID "..timerID)
             while timerID ~= 0 do
                 event = {os.pullEvent("timer")}
-                print("Resetting Timer 1")
                 if event[2] == timerID then
-                    print("Finished Timer 1")
                     timerID = 0;
                 end
             end
-            rs.setOutput("right",false)
-            
             timerID = os.startTimer(1)
-            print("timerID "..timerID)
             while timerID ~= 0 do
-                print("Resetting Timer 2")
                 event = {os.pullEvent("timer")}
                 if event[2] == timerID then
-                    print("Finished Timer 2")
                     timerID = 0;
                 end
             end
             upDateFloors()
             print("finished")
-
-        
         end
         runningUpdates = runningUpdates - 1;
         print("Running Updates: "..runningUpdates);
@@ -249,11 +224,11 @@ end
 
 local function startFunction()
     goToEvent = event();
-    goToEvent:addCallback(goTo);
+    -- goToEvent:addCallback(goTo);
     initEvent = event();
-    initEvent:addCallback(initFloors);
+    -- initEvent:addCallback(initFloors);
     updateEvent = event();
-    updateEvent:addCallback(addFloorFunction)
+    -- updateEvent:addCallback(addFloorFunction)
 
     openModem()
     init()

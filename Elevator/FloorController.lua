@@ -229,7 +229,7 @@ function floorController:startUp()
 end
 
 function floorController:updateConfig(newConfig)
-    
+
     print("Channel = ", newConfig.ownChannel)
     self.config.ownPosition = newConfig.ownPosition or self.config.ownPosition
     self.config.ownChannel = newConfig.ownChannel or self.config.ownChannel
@@ -244,8 +244,5 @@ function openChannel(channel)
     m.open(channel)
 
 end
-
-
-
 
 return floorController
