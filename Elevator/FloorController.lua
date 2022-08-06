@@ -93,7 +93,6 @@ function floorController:listenToNetworkEvents(tbl_Active, timeout, callback, ..
     while tbl_Active.active do
         local event, key, channel, _, data = os.pullEvent()
         if event=="modem_message" then
-            print("got Event");
             if channel == self.config.ownChannel then
                 if(type(data) == "table") then
                     self.config.ownPosition = data.floor

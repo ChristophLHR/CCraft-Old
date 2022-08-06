@@ -70,7 +70,7 @@ function addFloor(number)
     _ = e + goTo;
     button.parameter = number;
 
-    table.insert( floorButtons, button)
+    table.insert(floorButtons, button)
 
 
 end
@@ -105,7 +105,6 @@ end
 
 function callButtonEvent()
 
-    -- w.continueListener = false
     f:goToFloor(f.config.ownPosition)
 
 end
@@ -116,8 +115,6 @@ function goTo(args)
         bussyButton()
         w.drawChanges = true
         f:goToFloor(number, {success = successButton, error = errorButton})
-
-        -- f:goToFloor(number)
     end
 
 end
@@ -138,15 +135,15 @@ function refreshElevatorStats()
     for i = 1, #floorButtons do
 
         local number = tonumber(floorButtons[i].text)
-        w:editButton(floorButtons[i], nil, nil, nil, colors.white, colors.orange, nil, nil, goTo, number)
+        w:editButton(floorButtons[i], nil, nil, nil, colors.white, colors.orange, nil, nil)
 
         if(number == f.state.currentFloor) then
-            w:editButton(floorButtons[i], nil, nil, nil, nil, colors.blue, nil, nil, goTo, number)
+            w:editButton(floorButtons[i], nil, nil, nil, nil, colors.blue, nil, nil)
         elseif(number == f.state.goalFloor) then
-            w:editButton(floorButtons[i], nil, nil, nil, nil, colors.green, nil, nil, goTo, number)
+            w:editButton(floorButtons[i], nil, nil, nil, nil, colors.green, nil, nil)
         end
         if(number == f.config.ownPosition) then
-            w:editButton(floorButtons[i], nil, nil, nil, colors.black, nil, nil, nil, goTo, number)
+            w:editButton(floorButtons[i], nil, nil, nil, colors.black, nil, nil, nil)
         end
     end
 
@@ -213,11 +210,13 @@ function run()
     parallel.waitForAny(
         function ()
             local status, error = pcall(f.listenToNetworkEvents, f, listenToNetwork, nil, {update = refreshElevatorStats, updateFloors = updateUI})
-                print(error);
+            debug.traceback("Called from: ");
+            print(error);
         end,
         function ()
             local status, error = pcall(w.listenToEvents, w, 0.1, 0.3)
-                print(error);
+            debug.traceback("Called from: ");    
+            print(error);
         end
     )
 
@@ -227,9 +226,3 @@ end
 
 updateUI()
 initFloorController()
-
--- w:listenToEvents(0.3, 0.2)
--- sleep(1)
--- updateEvent = function() pretty.print(pretty.pretty(f.state)) end
--- parallel.waitForAll(function() goTo({5}) end, function() f:listenToNetworkEvents({active = true},_, {update = updateEvent}) end)
--- goTo({1})
