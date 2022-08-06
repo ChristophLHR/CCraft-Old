@@ -19,7 +19,7 @@ local goToEvent
 local initEvent 
 ---@class EventHandler
 local updateEvent
-os.sleep(10) -- GPS might need a sec to startup
+os.sleep(1) -- GPS might need a sec to startup
 
 local runningUpdates = 0;
 
@@ -189,7 +189,9 @@ function goTo(number)
             local timerID = os.startTimer(1)
             while timerID == 0 do
                 event = {os.pullEvent("timer")}
+                print("Resetting Timer 1")
                 if event[2] == timerID then
+                    print("Finished Timer 1")
                     timerID = 0;
                 end
             end
@@ -197,9 +199,10 @@ function goTo(number)
             
             timerID = os.startTimer(1)
             while true do
+                print("Resetting Timer 2")
                 event = {os.pullEvent("timer")}
                 if event[2] == timerID then
-                    --dostuff
+                    print("Finished Timer 2")
                     timerID = 0;
                 end
             end
