@@ -21,6 +21,7 @@ local initEvent
 local updateEvent
 os.sleep(10) -- GPS might need a sec to startup
 
+local runningUpdates = 0;
 
 
 local tChannels = {
@@ -86,7 +87,7 @@ function initFloors(client)
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
 
     print("currentFloor = "..#tFloorClients)
-    if(goToEvent:findEvent("init")==nil) then
+    if(runningUpdates == 0) then
         refreshClients()
         goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
@@ -104,42 +105,6 @@ local function addFloorFunction()
     refreshClients()
     goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
 end
-
-
-
--- function runCommands()
---     while true do
---         local event = goToEvent:pullEvent()
---         if(event ~= nil) then
---             if(type(event)=="table") then
---                 local command = event[1]
---                 local data = event[2]
-
---                 if(command == "goTo") then
-
---                     goTo(data)
-
---                 elseif(command == "init") then
---                     initFloors(data)
---                 else
-
---                     print("unkown Command:")
---                     print(command)
-
---                 end
-
---             else
-                
---                 print("Event not in the Correct Format")
-                
---             end
---         else
---             -- print("Nothing To Do")
---             os.sleep(1.5)
---         end
---         -- print("One run")
---     end
--- end
 
 function listenToEvents()
 
@@ -199,6 +164,7 @@ end
 
 function goTo(number)
     CCEventHandler:add(function ()
+        runningUpdates = runningUpdates + 1;
         print("going to Floor "..number)
 
         tFloorInfo.goalFloor = number
@@ -245,7 +211,8 @@ function goTo(number)
 
         
         end
-
+        runningUpdates = runningUpdates - 1;
+        print("Running Updates: "..runningUpdates);
     end)
 end
 
