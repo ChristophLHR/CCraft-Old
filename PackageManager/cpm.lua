@@ -27,7 +27,7 @@ cpm = {}
 
 cpm.Programms = 
 {
-    ["FloorInterface"] = {gitDownload = "ChristophLHR/CCraft/main/Elevator/FloorInterface.lua", path = "FloorInterface.lua"},
+    ["FloorInterface"] = {gitDownload = "ChristophLHR/CCraft/main/Elevator/FloorInterface.lua", path = "startup.lua"},
     ["FloorController"] = {gitDownload = "ChristophLHR/CCraft/main/Elevator/FloorController.lua", path = "API/FloorController.lua"},
     ["ElevatorController"] = {gitDownload = "ChristophLHR/CCraft/main/Elevator/ElevatorController.lua", path = "startup.lua"},
     ["CC-EventHandler"] = {gitDownload = "ChristophLHR/CCraft/main/EventHandler/CCEventHandler.lua", path = "API/CC-EventHandler.lua"},

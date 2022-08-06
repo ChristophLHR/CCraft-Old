@@ -1,14 +1,24 @@
 local dependencies = {
-    "EventHandler"
+    "EventHandler",
+    "CC-EventHandler"
 }
-installer.install(dependencies);
-local events = require("API/EventHandler")
-local pretty = require("cc.pretty")
 local installer = require("cpm")
+installer.install(dependencies);
+---@class EventHandler
+local event = require("API/EventHandler")
+---@class CCEventHandler
+local ccEventHandler = require("API/CC-EventHandler");
+local pretty = require("cc.pretty")
 
 args = {...}
 local modem
-
+-- all eventHandlers
+---@class EventHandler
+local goToEvent
+---@class EventHandler
+local initEvent 
+---@class EventHandler
+local updateEvent
 os.sleep(10) -- GPS might need a sec to startup
 
 
@@ -76,7 +86,7 @@ function initFloors(client)
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
 
     print("currentFloor = "..#tFloorClients)
-    if(events:findEvent("init")==nil) then
+    if(goToEvent:findEvent("init")==nil) then
         refreshClients()
         goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
@@ -85,43 +95,51 @@ function initFloors(client)
 
 end
 
-function runCommands()
-
-
-
-    while true do
-        local event = events:pullEvent()
-        if(event ~= nil) then
-            if(type(event)=="table") then
-                local command = event[1]
-                local data = event[2]
-
-                if(command == "goTo") then
-
-                    goTo(data)
-
-                elseif(command == "init") then
-                    initFloors(data)
-                else
-
-                    print("unkown Command:")
-                    print(command)
-
-                end
-
-            else
-                
-                print("Event not in the Correct Format")
-                
-            end
-        else
-            -- print("Nothing To Do")
-            os.sleep(1.5)
-        end
-        -- print("One run")
-
-    end
+function UpdateFunction()
+    modem.transmit(rpyChannel, tChannels.ownChannel, true)
+    upDateFloors()
 end
+
+local function addFloorFunction()
+    refreshClients()
+    goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
+end
+
+
+
+-- function runCommands()
+--     while true do
+--         local event = goToEvent:pullEvent()
+--         if(event ~= nil) then
+--             if(type(event)=="table") then
+--                 local command = event[1]
+--                 local data = event[2]
+
+--                 if(command == "goTo") then
+
+--                     goTo(data)
+
+--                 elseif(command == "init") then
+--                     initFloors(data)
+--                 else
+
+--                     print("unkown Command:")
+--                     print(command)
+
+--                 end
+
+--             else
+                
+--                 print("Event not in the Correct Format")
+                
+--             end
+--         else
+--             -- print("Nothing To Do")
+--             os.sleep(1.5)
+--         end
+--         -- print("One run")
+--     end
+-- end
 
 function listenToEvents()
 
@@ -137,7 +155,8 @@ function listenToEvents()
 
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
                         -- sleep Event within
-                        events:queueEvent({"goTo", message.args.floor})
+                        -- goToEvent:queueEvent({"goTo", message.args.floor})
+                        goToEvent:invoke(message.args.floor);
 
                     elseif(message.command == "update") then
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
@@ -145,7 +164,8 @@ function listenToEvents()
 
                     elseif(message.command == "init") then
                         -- sleep Event within
-                        events:queueEvent({"init", message.args})
+                        -- goToEvent:queueEvent({"init", message.args})
+                        initEvent:invoke(message.args);
                     else
 
                         print("unkown Command:")
@@ -171,65 +191,66 @@ end
 
 function openModem(position)
 
-    modem = peripheral.finde("modem")
+    modem = peripheral.find("modem")
     modem.open(tChannels.ownChannel)
     modem.open(tChannels.globalChannel)
 
 end
 
 function goTo(number)
+    CCEventHandler:add(function ()
+        print("going to Floor "..number)
 
-    print("going to Floor "..number)
+        tFloorInfo.goalFloor = number
+        
+        while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
 
-    tFloorInfo.goalFloor = number
-    
-    while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
+            -- Invert the Flow ( Go either up or down )
+            if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
+                
+                rs.setOutput("back", false)
+                tFloorInfo.currentFloor = tFloorInfo.currentFloor + 1
+                
+            else
+                
+                rs.setOutput("back",true)
+                tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
+                
+            end
+            rs.setOutput("right", true)
+            -- Timers 
 
-        -- Invert the Flow ( Go either up or down )
-        if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
+            local timerID = os.startTimer(1)
+            while true do
+                event = {os.pullEvent("timer")}
+                if event[2] == timerID then
+                    print("Timer 6")
+                    --dostuff
+                    timerID = os.startTimer(6)
+                end
+            end
+            rs.setOutput("right",false)
             
-            rs.setOutput("back", false)
-            tFloorInfo.currentFloor = tFloorInfo.currentFloor + 1
-            
-        else
-            
-            rs.setOutput("back",true)
-            tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
-            
+            timerID = os.startTimer(1)
+            while true do
+                event = {os.pullEvent("timer")}
+                if event[2] == timerID then
+                    print("Timer 6")
+                    --dostuff
+                    timerID = os.startTimer(6)
+                end
+            end
+            upDateFloors()
+            print("finished")
+
+        
         end
-        rs.setOutput("right", true)
-        os.sleep(1)
-        rs.setOutput("right",false)
-        
-        os.sleep(1.0)
-        upDateFloors()
 
-        
-    end
-
-    print("finished")
-
-
-
+    end)
 end
 
 function init()
-    -- maxFloor und minFloor ToDo
     modem.transmit(tChannels.globalChannel, tChannels.ownChannel, {command = "startUp"})
-
-    -- -- testing 
-    -- tFloorClients = {
-    --     {id = 0, gps = {y = 1}},
-    --     {id = 1, gps = {y = 2}, groundFloor = true},
-    --     {id = 2, gps = {y = 4}}
-    -- }
-
-    -- -- initFloors()
-    -- events:queueEvent({"init", {id = 3, gps = {y = 3}}})
-    -- events:queueEvent({"init", {id = 4, gps = {y = 6}}})
-
-    parallel.waitForAll(listenToEvents, runCommands)
-
 end
 
 function refreshClients()
@@ -257,8 +278,24 @@ function upDateFloors()
 
 end
 
+local function startFunction()
+    goToEvent = event();
+    goToEvent:addCallback(goTo);
+    initEvent = event();
+    initEvent:addCallback(initFloors);
+    updateEvent = event();
+    updateEvent:addCallback(addFloorFunction)
+
+    openModem()
+    init()
+
+    ccEventHandler:add(listenToEvents);
+    ccEventHandler:start();
+
+end
+
+startFunction();
+
 -- Programmstart
 
-openModem()
 
-init()

@@ -8,6 +8,10 @@ installer.install(dependencies);
 
 
 -- ---> Class Defenition
+--- init Class of Event
+--- local e = require Event
+--- local customEvent = e()
+---@class OOP
 OOP = require("API/OOP")
 
 ---@class EventHandler

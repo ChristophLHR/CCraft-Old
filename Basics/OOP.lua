@@ -1,3 +1,9 @@
+--- require OOP
+--- OOP.class(function(ref,name, callbacks)
+---     ref.name = name
+---     ref.callbacks = callbacks or {}
+--- end);
+---@class OOP
 OOP = {}
 function OOP.class(base, init)
     local c = {}

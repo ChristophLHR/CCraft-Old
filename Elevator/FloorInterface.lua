@@ -2,12 +2,13 @@ local dependencies = {
     "WindowHandler",
     "FloorController"
 }
+local installer = require("cpm")
 installer.install(dependencies);
 
 ---@class windowHandler
 w = require("API/windowHandler")
 ---@class FloorController
-f = require("API/floorController")
+f = require("API/FloorController")
 
 pretty = require("cc.pretty")
 
