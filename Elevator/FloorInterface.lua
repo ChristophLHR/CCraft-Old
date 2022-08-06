@@ -109,8 +109,7 @@ function callButtonEvent()
 
 end
 
-function goTo(args)
-    local number = args[1]
+function goTo(number)
     if(number ~= f.state.goalFloor)then
         bussyButton()
         w.drawChanges = true
