@@ -103,7 +103,7 @@ function initFloors(client)
     if(groundFloor ~= nil) then groundFloor = groundFloor - 1
     else groundFloor = 0 end
     
-    tFloorInfo.currentFloor = #tFloorClients - groundFloor - 1
+    tFloorInfo.currentFloor = #tFloorClients - groundFloor - 1 -- anzahl - groundlevel - eins(weil array bei 1 anfängt)
 
     tFloorInfo["start"] = 0 - groundFloor
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
@@ -187,7 +187,7 @@ function goTo(number)
             print(tostring(#tFloorClients));
             print(tFloorInfo.currentFloor.." + "..groundFloor);
             print(tFloorInfo.goalFloor);
-            local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor + 1].gps.y
+            local gps = tFloorClients[tFloorInfo.currentFloor + groundFloor + 1].gps.y
             local nextGps
             local goUp = 0
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
