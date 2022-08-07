@@ -137,7 +137,7 @@ function listenToEvents()
                     if(message.command == "goTo") then
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
                         -- sleep Event within
-                        goToEvent:add(goTo);
+                        goToEvent:addCallback(goTo);
                         goToEvent:invoke(message.args.floor);
 
                     elseif(message.command == "update") then
@@ -148,7 +148,7 @@ function listenToEvents()
                         -- sleep Event within
                         print("Init Event 2")
                         pretty.print(pretty.pretty(initEvent))
-                        initEvent:add(initFloors)
+                        initEvent:addCallback(initFloors)
                         initEvent:invoke(message.args);
                     else
                         print("unkown Command:")
