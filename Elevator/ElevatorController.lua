@@ -186,10 +186,10 @@ function goTo(number)
             local goUp = 0
             print(tostring(#tFloorClients));
             print(tFloorInfo.currentFloor.." + "..groundFloor);
-            print(tFloorInfo.currentFloor + groundFloor);
-            -- pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor]));
+            print(tFloorInfo.goalFloor);
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 goUp = 1
+                -- arrays fangen bei 1 an
                 nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 1].gps.y
             elseif (tFloorInfo.currentFloor > tFloorInfo.goalFloor) then
                 nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor].gps.y
@@ -197,8 +197,9 @@ function goTo(number)
             else 
                 arrived = true
             end
+            print(arrived)
             while not arrived do
-                print("between floor "..tFloorInfo.currentFloor.." and Floor "..tFloorInfo.currentFloor + goUp);
+                print("between floor "..tFloorInFfo.currentloor.." and Floor "..tFloorInfo.currentFloor + goUp);
                 -- if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 if goUp == 1 then
                     rs.setOutput("back", false)
@@ -209,6 +210,7 @@ function goTo(number)
                     -- tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
                     gps = gps - floors;
                 end
+                print(tostring(gps));
                 rs.setOutput("right", true)
                 -- Timers 
                 local timerID = os.startTimer(timing)
