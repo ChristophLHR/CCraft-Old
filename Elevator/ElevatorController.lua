@@ -226,6 +226,13 @@ function goTo(number)
                     end
                 end
                 rs.setOutput("right", false)
+                timerID = os.startTimer(0.5)
+                while timerID ~= 0 do
+                    event = {os.pullEvent("timer")}
+                    if event[2] == timerID then
+                        timerID = 0;
+                    end
+                end
                 if goUp == 1 then
                     arrived = (gps >= (nextGps - (floors / 3)));
                 else
@@ -286,7 +293,7 @@ local function startFunction()
     goToEvent:addCallback(goTo);
     -- goToEvent:addCallback(goTo);
     initEvent = event(event);
-    initEvent:addCallback(initFloors)
+                        initEvent:addCallback(initFloors)
 
     -- initEvent:addCallback(initFloors);
     updateEvent = event(event);
