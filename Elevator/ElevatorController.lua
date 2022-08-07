@@ -234,9 +234,9 @@ function goTo(number)
                     end
                 end
                 if goUp == 1 then
-                    arrived = (gps >= (nextGps - (floors / 3)));
+                    arrived = (gps >= (nextGps - 2));
                 else
-                    arrived = (gps <= (nextGps + (floors / 3)));
+                    arrived = (gps <= (nextGps + 2));
                 end
                 
             end
