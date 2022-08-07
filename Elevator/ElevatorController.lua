@@ -75,7 +75,6 @@ function searchFunction(compareFunction, tbl_ToSearch, item)
 end
 
 function initFloors(client)
-    
     -- if the Client Already exists: Replace, otherwise insert.
     search = function(tFloorClient, _client)
         return tFloorClient.id == _client.id
@@ -147,6 +146,8 @@ function listenToEvents()
 
                     elseif(message.command == "init") then
                         -- sleep Event within
+                        print("Init Event 2")
+                        pretty.print(pretty.pretty(initEvent))
                         initEvent:add(initFloors)
                         initEvent:invoke(message.args);
                     else
