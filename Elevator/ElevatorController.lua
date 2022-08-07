@@ -133,7 +133,7 @@ function listenToEvents()
                     if(message.command == "goTo") then
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
                         -- sleep Event within
-                        goToEvent:addCallback(goTo);
+                        
                         goToEvent:invoke(message.args.floor);
 
                     elseif(message.command == "update") then
@@ -142,7 +142,6 @@ function listenToEvents()
 
                     elseif(message.command == "init") then
                         -- sleep Event within
-                        initEvent:addCallback(initFloors)
                         initEvent:invoke(message.args);
                     else
                         print("unkown Command:")
@@ -171,6 +170,10 @@ end
 ---@param number integer
 function goTo(number)
     local func = function(no)
+        if runningUpdates > 0 then 
+            print("tried to run again")
+            print(debug.traceback());
+        end
         runningUpdates = runningUpdates + 1;
         print("going to Floor "..no)
 
@@ -201,7 +204,6 @@ function goTo(number)
             while not arrived do
                 print("between floor "..tFloorInfo.currentFloor.." and Floor "..tFloorInfo.currentFloor + goUp);
                 print("GoUp: "..tostring(goUp))
-                print("GPS: "..gps)
                 -- if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 if goUp == 1 then
                     rs.setOutput("back", false)
@@ -212,6 +214,7 @@ function goTo(number)
                     -- tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
                     gps = gps - floors;
                 end
+                print("GPS: "..gps)
                 print(tostring(gps));
                 rs.setOutput("right", true)
                 -- Timers 
@@ -280,8 +283,11 @@ end
 
 local function startFunction()
     goToEvent = event(event);
+    goToEvent:addCallback(goTo);
     -- goToEvent:addCallback(goTo);
     initEvent = event(event);
+    initEvent:addCallback(initFloors)
+
     -- initEvent:addCallback(initFloors);
     updateEvent = event(event);
     -- updateEvent:addCallback(addFloorFunction)
