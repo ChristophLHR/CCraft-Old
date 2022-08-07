@@ -172,12 +172,14 @@ function openModem(position)
 
 end
 
+---comment
+---@param number integer
 function goTo(number)
-    CCEventHandler:add(function ()
+    local func = function(no)
         runningUpdates = runningUpdates + 1;
-        print("going to Floor "..number)
+        print("going to Floor "..no)
 
-        tFloorInfo.goalFloor = number
+        tFloorInfo.goalFloor = no
         
         while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
             -- calc GPS -> do rounds
@@ -229,6 +231,14 @@ function goTo(number)
             print("finished")
         end
         runningUpdates = runningUpdates - 1;
+    end
+    
+    CCEventHandler:add( function()
+        local status, error = pcall(func, number)
+        if not status then
+            print(error);
+            debug.traceback("Error here: ");
+        end
     end)
 end
 
@@ -272,7 +282,11 @@ local function startFunction()
     openModem()
     init()
 
-    ccEventHandler:add(listenToEvents);
+    ccEventHandler:add(function ()
+        local _, error = pcall(listenToEvents)
+        print(error);
+        debug.traceback();
+    end);
     ccEventHandler:start();
 
 end
