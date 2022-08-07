@@ -103,7 +103,7 @@ function initFloors(client)
     if(groundFloor ~= nil) then groundFloor = groundFloor - 1
     else groundFloor = 0 end
     
-    tFloorInfo.currentFloor = #tFloorClients - groundFloor
+    tFloorInfo.currentFloor = #tFloorClients - groundFloor - 1
 
     tFloorInfo["start"] = 0 - groundFloor
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
@@ -231,7 +231,7 @@ function goTo(number)
                 
             end
             tFloorInfo.currentFloor = tFloorInfo.currentFloor + goUp;
-            print("NewGoUp and Currentflow: ".. goUp .. " - ".. tFloorInfo.currentFloor);
+            print("NewGoUp and Currentfloor: ".. goUp .. " - ".. tFloorInfo.currentFloor);
             -- local nextFloor = tFloorClients[tFloorInfo.currentFloor + tFloorInfo["start"] + 1]
 
             upDateFloors()
