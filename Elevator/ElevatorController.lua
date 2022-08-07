@@ -111,7 +111,7 @@ function initFloors(client)
     if(runningUpdates < 1) then
         runningUpdates = 0;
         refreshClients()
-        goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
+        goTo(1 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
         -- print("there is an other registration")
     end
@@ -121,11 +121,6 @@ end
 function UpdateFunction()
     modem.transmit(rpyChannel, tChannels.ownChannel, true)
     upDateFloors()
-end
-
-local function addFloorFunction()
-    refreshClients()
-    goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
 end
 
 function listenToEvents()
@@ -189,7 +184,7 @@ function goTo(number)
             local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
             local nextGps
             local goUp = 0
-            pretty.print(#tFloorClients);
+            print(tostring(#tFloorClients));
             print(tFloorInfo.currentFloor.." + "..groundFloor);
             print(tFloorInfo.currentFloor + groundFloor);
             pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor]));
