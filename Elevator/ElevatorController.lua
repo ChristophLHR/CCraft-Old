@@ -189,6 +189,8 @@ function goTo(number)
             local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
             local nextGps
             local goUp = 1
+            pretty.print(pretty.pretty(tFloorClients));
+            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor-groundFloor + 1]));
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 nextGps = tFloorClients[tFloorInfo.currentFloor-groundFloor + 1].gps.y
             else
