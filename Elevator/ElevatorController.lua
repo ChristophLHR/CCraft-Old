@@ -179,6 +179,7 @@ function goTo(number)
         while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
             -- calc GPS -> do rounds
             -- -1 + -1 + 1
+            -- courtine check
             local arrived = false
             local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
             local nextGps
@@ -198,8 +199,8 @@ function goTo(number)
             end
             print(arrived)
             while not arrived do
-                print("between floor "..tFloorInFfo.currentloor.." and Floor "..tFloorInfo.currentFloor + goUp);
-                print("GoUp: "..tosting(goUp))
+                print("between floor "..tFloorInfo.currentFloor.." and Floor "..tFloorInfo.currentFloor + goUp);
+                print("GoUp: "..tostring(goUp))
                 print("GPS: "..gps)
                 -- if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 if goUp == 1 then
@@ -222,14 +223,15 @@ function goTo(number)
                     end
                 end
                 rs.setOutput("right", false)
-                if goUp then
-                    arrived = gps >= nextGps - (floors / 3);
+                if goUp == 1 then
+                    arrived = (gps >= (nextGps - (floors / 3)));
                 else
-                    arrived = gps <= nextGps + (floors / 3);
+                    arrived = (gps <= (nextGps + (floors / 3)));
                 end
                 
             end
             tFloorInfo.currentFloor = tFloorInfo.currentFloor + goUp;
+            print("NewGoUp and Currentflow: ".. goUp .. " - ".. tFloorInfo.currentFloor);
             -- local nextFloor = tFloorClients[tFloorInfo.currentFloor + tFloorInfo["start"] + 1]
 
             upDateFloors()
