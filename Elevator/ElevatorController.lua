@@ -273,11 +273,11 @@ function upDateFloors()
 end
 
 local function startFunction()
-    goToEvent = event();
+    goToEvent = event(event);
     -- goToEvent:addCallback(goTo);
-    initEvent = event();
+    initEvent = event(event);
     -- initEvent:addCallback(initFloors);
-    updateEvent = event();
+    updateEvent = event(event);
     -- updateEvent:addCallback(addFloorFunction)
 
     openModem()
