@@ -92,7 +92,7 @@ function initFloors(client)
         return a.gps.y < b.gps.y
     end
     table.sort(tFloorClients, sort)
-    print("Client added to the Table: "..tostring(client.id))
+    -- print("Client added to the Table: "..tostring(client.id))
     -- pretty.print(pretty.pretty(tFloorClients))
 
     -- get ground floor
@@ -113,7 +113,7 @@ function initFloors(client)
         refreshClients()
         goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
-        print("there is an other registration")
+        -- print("there is an other registration")
     end
 
 end
@@ -188,14 +188,19 @@ function goTo(number)
             local tmpCurrentFloor = tFloorInfo.currentFloor
             local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
             local nextGps
-            local goUp = 1
-            pretty.print(pretty.pretty(tFloorClients));
-            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor + 1]));
+            local goUp = 0
+            pretty.print(#tFloorClients);
+            print(tFloorInfo.currentFloor.." + "..groundFloor);
+            print(tFloorInfo.currentFloor + groundFloor);
+            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor]));
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
-                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 1].gps.y
-            else
+                goUp = 1
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor].gps.y
+            elseif (tFloorInfo.currentFloor > tFloorInfo.goalFloor) then
                 nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor - 1].gps.y
                 goUp = -1
+            else 
+                arrived = true
             end
             while not arrived do
                 
