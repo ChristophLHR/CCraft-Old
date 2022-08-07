@@ -108,7 +108,8 @@ function initFloors(client)
     tFloorInfo["start"] = 0 - groundFloor
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
 
-    if(runningUpdates == 0) then
+    if(runningUpdates < 1) then
+        runningUpdates = 0;
         refreshClients()
         goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
@@ -146,8 +147,6 @@ function listenToEvents()
 
                     elseif(message.command == "init") then
                         -- sleep Event within
-                        print("Init Event 2")
-                        pretty.print(pretty.pretty(initEvent))
                         initEvent:addCallback(initFloors)
                         initEvent:invoke(message.args);
                     else
