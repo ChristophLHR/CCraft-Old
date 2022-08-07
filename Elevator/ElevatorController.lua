@@ -187,18 +187,18 @@ function goTo(number)
             print(tostring(#tFloorClients));
             print(tFloorInfo.currentFloor.." + "..groundFloor);
             print(tFloorInfo.currentFloor + groundFloor);
-            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor]));
+            -- pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor]));
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 goUp = 1
-                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor].gps.y
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 1].gps.y
             elseif (tFloorInfo.currentFloor > tFloorInfo.goalFloor) then
-                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor - 1].gps.y
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor].gps.y
                 goUp = -1
             else 
                 arrived = true
             end
             while not arrived do
-                
+                print("between floor "..tFloorInfo.currentFloor.." and Floor "..tFloorInfo.currentFloor + goUp);
                 -- if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 if goUp == 1 then
                     rs.setOutput("back", false)
@@ -230,8 +230,8 @@ function goTo(number)
             -- local nextFloor = tFloorClients[tFloorInfo.currentFloor + tFloorInfo["start"] + 1]
 
             upDateFloors()
-            print("finished")
         end
+        print("finished")
         runningUpdates = runningUpdates - 1;
     end
     
