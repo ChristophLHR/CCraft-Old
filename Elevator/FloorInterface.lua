@@ -180,7 +180,6 @@ function updateUI()
     dragableWindow.enableYDrag = true
 
     -- set Buttons
-    print("Building buttons")
     if(f.config.start ~= nil) then
         for i= f.config.start, f.config["end"], 1 do
 

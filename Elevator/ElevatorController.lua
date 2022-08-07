@@ -10,7 +10,30 @@ local event = require("API/EventHandler")
 local ccEventHandler = require("API/CC-EventHandler");
 local pretty = require("cc.pretty")
 
-args = {...}
+local timing, floors = ...
+
+-- set settings
+if (type(timing) == "string") then
+    timing = tonumber(timing);
+    settings.set("Timing", timing)
+else
+    timing = settings.get("Timing");
+    if timing == nil then
+        error("No Timing set for floors")
+    end
+end
+
+if (type(floors) == "string") then
+    floors = tonumber(timing);
+    settings.set("Floors", floors)
+else
+    floors = settings.get("Floors");
+    if floors == nil then
+        error("No FloorDistance set")
+    end
+end
+
+
 local modem
 -- all eventHandlers
 ---@class EventHandler
@@ -19,7 +42,7 @@ local goToEvent
 local initEvent 
 ---@class EventHandler
 local updateEvent
--- os.sleep(1) -- GPS might need a sec to startup
+os.sleep(1) -- GPS might need a sec to startup
 
 local runningUpdates = 0;
 
@@ -38,8 +61,8 @@ local tFloorInfo = {
 
 local groundFloor = 0
 
--- Functions
 
+---@type table <gps, id, networkID>
 local tFloorClients = {}
 
 function searchFunction(compareFunction, tbl_ToSearch, item)
@@ -86,7 +109,6 @@ function initFloors(client)
     tFloorInfo["start"] = 0 - groundFloor
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
 
-    print("currentFloor = "..#tFloorClients)
     if(runningUpdates == 0) then
         refreshClients()
         goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
@@ -114,10 +136,8 @@ function listenToEvents()
                 if(message.command) then
 
                     if(message.command == "goTo") then
-                        print("Goint to: "..message.args.floor);
                         modem.transmit(rpyChannel, tChannels.ownChannel, true)
                         -- sleep Event within
-                        -- goToEvent:queueEvent({"goTo", message.args.floor})
                         goToEvent:add(goTo);
                         goToEvent:invoke(message.args.floor);
 
@@ -127,7 +147,6 @@ function listenToEvents()
 
                     elseif(message.command == "init") then
                         -- sleep Event within
-                        -- goToEvent:queueEvent({"init", message.args})
                         initEvent:add(initFloors)
                         initEvent:invoke(message.args);
                     else
@@ -161,35 +180,55 @@ function goTo(number)
         tFloorInfo.goalFloor = number
         
         while tFloorInfo.goalFloor~=tFloorInfo.currentFloor do
-            -- Invert the Flow ( Go either up or down )
+            -- calc GPS -> do rounds
+            -- -1 + -1 + 1
+            local arrived = false
+            local tmpCurrentFloor = tFloorInfo.currentFloor
+            local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
+            local nextGps
+            local goUp = 1
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
-                rs.setOutput("back", false)
-                tFloorInfo.currentFloor = tFloorInfo.currentFloor + 1
+                nextGps = tFloorClients[tFloorInfo.currentFloor-groundFloor + 1].gps.y
             else
-                rs.setOutput("back",true)
-                tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
+                nextGps = tFloorClients[tFloorInfo.currentFloor-groundFloor - 1].gps.y
+                goUp = -1
             end
-            rs.setOutput("right", true)
-            -- Timers 
-            local timerID = os.startTimer(1)
-            while timerID ~= 0 do
-                event = {os.pullEvent("timer")}
-                if event[2] == timerID then
-                    timerID = 0;
+            while not arrived do
+                
+                -- if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
+                if goUp == 1 then
+                    rs.setOutput("back", false)
+                    -- tFloorInfo.currentFloor = tFloorInfo.currentFloor + 1
+                    gps = gps + floors;
+                else
+                    rs.setOutput("back",true)
+                    -- tFloorInfo.currentFloor = tFloorInfo.currentFloor - 1
+                    gps = gps - floors;
                 end
-            end
-            timerID = os.startTimer(1)
-            while timerID ~= 0 do
-                event = {os.pullEvent("timer")}
-                if event[2] == timerID then
-                    timerID = 0;
+                rs.setOutput("right", true)
+                -- Timers 
+                local timerID = os.startTimer(timing)
+                while timerID ~= 0 do
+                    event = {os.pullEvent("timer")}
+                    if event[2] == timerID then
+                        timerID = 0;
+                    end
                 end
+                rs.setOutput("right", false)
+                if goUp then
+                    arrived = gps >= nextGps;
+                else
+                    arrived = gps <= nextGps;
+                end
+                
             end
+            tFloorInfo.currentFloor = tmpCurrentFloor + goUp;
+            -- local nextFloor = tFloorClients[tFloorInfo.currentFloor + tFloorInfo["start"] + 1]
+
             upDateFloors()
             print("finished")
         end
         runningUpdates = runningUpdates - 1;
-        print("Running Updates: "..runningUpdates);
     end)
 end
 

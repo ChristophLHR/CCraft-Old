@@ -47,7 +47,6 @@ function floorController:init(config, modem, timeout , callback, ...)
             if(callback) then
                 if(type(callback) == "table") then
                     if(callback.updateFloors) then
-                    print("Calling")
                     callback.updateFloors(...)
                     elseif(callback.update) then
                         callback.update(...)
@@ -86,10 +85,6 @@ function floorController:listenToNetworkEvents(tbl_Active, timeout, callback, ..
         timer = os.startTimer(timeout)
     end
     
-    print(tbl_Active);
-    print(timeout);
-    print(callback);
-    print(args);
     while tbl_Active.active do
         local event, key, channel, _, data = os.pullEvent()
         if event=="modem_message" then
@@ -221,7 +216,6 @@ function floorController:startUp()
                 info.gps = {x = _x, y = _y, z = _z}
                 info.groundFloor = self.config.groundFloor
                 m.transmit(self.config.receiverChannel ,self.config.ownChannel, {command = "init", args = info})
-                print("Send")
                 return
             end
             os.sleep(1)
