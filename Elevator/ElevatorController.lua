@@ -190,11 +190,11 @@ function goTo(number)
             local nextGps
             local goUp = 1
             pretty.print(pretty.pretty(tFloorClients));
-            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor-groundFloor + 1]));
+            pretty.print(pretty.pretty(tFloorClients[tFloorInfo.currentFloor+groundFloor + 1]));
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
-                nextGps = tFloorClients[tFloorInfo.currentFloor-groundFloor + 1].gps.y
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 1].gps.y
             else
-                nextGps = tFloorClients[tFloorInfo.currentFloor-groundFloor - 1].gps.y
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor - 1].gps.y
                 goUp = -1
             end
             while not arrived do
