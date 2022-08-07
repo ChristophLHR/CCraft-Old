@@ -24,7 +24,7 @@ else
 end
 
 if (type(floors) == "string") then
-    floors = tonumber(timing);
+    floors = tonumber(floors);
     settings.set("Floors", floors)
 else
     floors = settings.get("Floors");
