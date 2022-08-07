@@ -216,9 +216,9 @@ function goTo(number)
                 end
                 rs.setOutput("right", false)
                 if goUp then
-                    arrived = gps >= nextGps;
+                    arrived = gps >= nextGps - (floors / 3);
                 else
-                    arrived = gps <= nextGps;
+                    arrived = gps <= nextGps + (floors / 3);
                 end
                 
             end
