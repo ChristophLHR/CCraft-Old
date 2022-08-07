@@ -108,10 +108,10 @@ function initFloors(client)
     tFloorInfo["start"] = 0 - groundFloor
     tFloorInfo["end"] = #tFloorClients - groundFloor - 1
 
-    if(runningUpdates < 1) then
+    if(runningUpdates < 1 and (#tFloorClients > 1)) then
         runningUpdates = 0;
         refreshClients()
-        goTo(1 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
+        goTo(0 - groundFloor) -- Das hier verschieben auf mit einem Timeout in Main!!!
     else
         -- print("there is an other registration")
     end
