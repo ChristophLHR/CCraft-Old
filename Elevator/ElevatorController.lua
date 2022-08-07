@@ -181,16 +181,16 @@ function goTo(number)
             -- -1 + -1 + 1
             -- courtine check
             local arrived = false
-            local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor].gps.y
-            local nextGps
-            local goUp = 0
             print(tostring(#tFloorClients));
             print(tFloorInfo.currentFloor.." + "..groundFloor);
             print(tFloorInfo.goalFloor);
+            local gps = tFloorClients[tFloorInfo.currentFloor-groundFloor + 1].gps.y
+            local nextGps
+            local goUp = 0
             if tFloorInfo.currentFloor < tFloorInfo.goalFloor then
                 goUp = 1
                 -- arrays fangen bei 1 an
-                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 1].gps.y
+                nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor + 2].gps.y
             elseif (tFloorInfo.currentFloor > tFloorInfo.goalFloor) then
                 nextGps = tFloorClients[tFloorInfo.currentFloor+groundFloor].gps.y
                 goUp = -1
