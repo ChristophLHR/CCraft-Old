@@ -11,7 +11,7 @@ local ccEventHandler = require("API/CC-EventHandler");
 local pretty = require("cc.pretty")
 
 local timing, floors = ...
-
+settings.load();
 -- set settings
 if (type(timing) == "string") then
     timing = tonumber(timing);
@@ -32,8 +32,7 @@ else
         error("No FloorDistance set")
     end
 end
-
-
+settings.save();
 local modem
 -- all eventHandlers
 ---@class EventHandler
@@ -65,6 +64,8 @@ local groundFloor = 0
 ---@type table <gps, id, networkID>
 local tFloorClients = {}
 
+
+
 function searchFunction(compareFunction, tbl_ToSearch, item)
     for key, value in pairs(tbl_ToSearch) do
         if(compareFunction(value, item)) then
@@ -74,6 +75,8 @@ function searchFunction(compareFunction, tbl_ToSearch, item)
     return nil
 end
 
+---comment
+---@param client table <gps, networkID>
 function initFloors(client)
     -- if the Client Already exists: Replace, otherwise insert.
     search = function(tFloorClient, _client)
@@ -166,7 +169,7 @@ function openModem(position)
 
 end
 
----comment
+--- ToDo: Muliple Calls while one is running
 ---@param number integer
 function goTo(number)
     local func = function(no)
@@ -255,6 +258,14 @@ function goTo(number)
         if not status then
             print(error);
             debug.traceback("Error here: ");
+            local timerID = os.startTimer(10)
+            while timerID ~= 0 do
+                event = {os.pullEvent("timer")}
+                if event[2] == timerID then
+                    timerID = 0;
+                    os.reboot();
+                end
+            end
         end
     end)
 end
@@ -293,7 +304,7 @@ local function startFunction()
     goToEvent:addCallback(goTo);
     -- goToEvent:addCallback(goTo);
     initEvent = event(event);
-                        initEvent:addCallback(initFloors)
+    initEvent:addCallback(initFloors)
 
     -- initEvent:addCallback(initFloors);
     updateEvent = event(event);
@@ -305,7 +316,15 @@ local function startFunction()
     ccEventHandler:add(function ()
         local _, error = pcall(listenToEvents)
         print(error);
-        debug.traceback();
+        print(debug.traceback());
+        local timerID = os.startTimer(10)
+            while timerID ~= 0 do
+                event = {os.pullEvent("timer")}
+                if event[2] == timerID then
+                    timerID = 0;
+                    os.reboot();
+                end
+            end
     end);
     ccEventHandler:start();
 
