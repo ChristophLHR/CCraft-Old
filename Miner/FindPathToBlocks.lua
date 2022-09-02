@@ -1,25 +1,33 @@
 ---@class FindPathToBlocks
+FindPathToBlocks = {}
+
 -- used Settings:
 -- Setting: InterestingBlocks
 -- Setting: ScanFiltered
 -- Setting: PathFromScanned
 -- Setting: Scan
-FindPathToBlocks = {}
 
+
+
+
+-- REQUIREMENTS
+---@class Scanner
+local Scanner = require("Scanner");
+---@class HelperFunctions
+local helper = require("HelperFunctions");
+---@class turtleController
+local tController = require("TurtleControler")
+---@class SettingsService
+local settingsService = require("SettingsService")
+---@class Log
+local log = require("Log")
+
+-- DEFINITIONS
 local defaultInterestingBlocks = {
     ["minecraft:deepslate_gold_ore"] = true
 }
 
----@class Scanner
-local Scanner = require("Scanner");
-
----@class HelperFunctions
-local helper = require("HelperFunctions");
-
----@class turtleController
-local tController = require("TurtleControler")
-
-
+-- CONTENT
 
 ---local function, required for the filter after the scan
 ---@param value ScanData
@@ -38,14 +46,10 @@ end
 ---@return ScanDataTable
 function FindPathToBlocks.find(distance)
     local scan = Scanner.scan(distance)
-    local interestingBlocks = ScanSettings.setGet("InterestingBlocks", nil, defaultInterestingBlocks)
+    local interestingBlocks = settingsService.setGet("InterestingBlocks", nil, defaultInterestingBlocks)
     scan = helper.filter(scan, filterFunction, interestingBlocks)
-    local filePathFiltered = ScanSettings.setGet("ScanFiltered", nil, "./ScanData/LastScanFiltered.lua");
-    local file = io.open(filePathFiltered, "w+")
-    if (file ~= nil) then
-        file:write(textutils.serialise(scan));
-        file:close();
-    end
+    local filePathFiltered = settingsService.setGet("ScanFiltered", nil, "./ScanData/LastScanFiltered.lua");
+    log.write(filePathFiltered, scan, "w+")
     return scan
 end
 
@@ -71,12 +75,8 @@ function FindPathToBlocks.sortFilteredScan(scanResult)
         scanResult = HelperFunctions.quickSort(scanResult, i, #scanResult, func, currentPosition);
         currentPosition = scanResult[i];
     end
-    local filePathSorted = ScanSettings.setGet("ScanSorted", nil, "./ScanData/LastScanSorted.lua");
-    local file = io.open(filePathSorted, "w+")
-    if (file ~= nil) then
-        file:write(textutils.serialise(scanResult));
-        file:close();
-    end
+    local filePathSorted = settingsService.setGet("ScanSorted", nil, "./ScanData/LastScanSorted.lua");
+    log.write(filePathSorted, scanResult, "w+")
     return scanResult;
 end
 

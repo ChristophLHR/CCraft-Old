@@ -1,7 +1,7 @@
----@class ScanSettings TODO: Its own File
-ScanSettings = {}
+---@class SettingsService TODO: Its own File
+SettingsService = {}
 
-function ScanSettings.setGet(name, value, defaultOption)
+function SettingsService.setGet(name, value, defaultOption)
     if value ~= nil then
         settings.set(name, value);
         return value;
@@ -11,4 +11,4 @@ function ScanSettings.setGet(name, value, defaultOption)
     return value or defaultOption;
 end
 
-return ScanSettings
+return SettingsService

@@ -1,4 +1,7 @@
--- Definitions
+---@class Scanner
+Scanner = {}
+
+-- DEFINITIONS
 ---@class ScanData
 ---@field x number
 ---@field y number
@@ -8,21 +11,19 @@
 ---@class ScanDataTable
 ---@field _ ScanData
 
----@class ScanSettings
-local ScanSettings = require("ScanSettings")
-
+-- REQUIREMENTS
+---@class SettingsService
+local settingsService = require("SettingsService")
 ---@class HelperFunctions
 local helper = require("HelperFunctions")
+---@class Log
+local log = require("Log")
 
----@class Scanner
-Scanner = {}
-
-
+-- CONTENT
 
 ---comment
 ---@param radius any
 ---@return ScanDataTable
----@field x number Dasd
 function Scanner.scan(radius)
     ---@type table
     local g = peripheral.find("geoScanner")
@@ -38,12 +39,8 @@ function Scanner.scan(radius)
     end
     result = helper.map(result, mapfunc) --[[@as ScanDataTable]]
     -- Should be on its own program
-    local filePath = ScanSettings.setGet("ScanDataFile", nil, "./ScanData/LastScanData.lua");
-    local file = io.open(filePath, "w+")
-    if (file ~= nil) then
-        file:write(textutils.serialise(result));
-        file:close();
-    end
+    local filePath = settingsService.setGet("ScanDataFile", nil, "./ScanData/LastScanData.lua");
+    log.write(filePath, result, "w+")
     return result;
 end
 
